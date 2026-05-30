@@ -16,23 +16,34 @@ set(GLEW_USE_STATIC_LIBS ON)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
+find_package(glm REQUIRED)
 
 add_library(kern_deps INTERFACE)
-target_link_libraries(kern_deps INTERFACE OpenGL::GL GLEW::GLEW glfw)
-target_include_directories(kern_deps INTERFACE ${GLEW_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
+target_link_libraries(kern_deps INTERFACE OpenGL::GL GLEW::GLEW glfw glm::glm)
+target_include_directories(kern_deps INTERFACE ${GLEW_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/kern ${CMAKE_SOURCE_DIR}/vendor/cglm/include)
 
 function(use_kern_dependencies target)
     target_link_libraries(${target} PUBLIC kern_deps)
 endfunction()
 
 # ---- Build all modules ----
-add_subdirectory(window)
+add_subdirectory(kern/core)
+add_subdirectory(kern/window)
+add_subdirectory(kern/error)
+add_subdirectory(kern/monitor)
 
 add_library(kern STATIC
-        $<TARGET_OBJECTS:kern_window>)
+        $<TARGET_OBJECTS:kern_core>
+        $<TARGET_OBJECTS:kern_window>
+        $<TARGET_OBJECTS:kern_error>
+        $<TARGET_OBJECTS:kern_monitor>)
 
 use_kern_dependencies(kern)
 
 # ---- Build Smoke Test Executable ----
 add_executable(kern_test test/main.c)
 target_link_libraries(kern_test PRIVATE kern)
+
+# ---- Build Demo Executable ----
+add_executable(kern_demo demo/main.c)
+target_link_libraries(kern_demo PRIVATE kern)
