@@ -1,9 +1,13 @@
+// This file is part of Kern, an open-source game development library.
+// Copyright (C) 2026 Vanadium Development
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #ifndef KERN_WINDOW_H
 #define KERN_WINDOW_H
 
 #include <GLFW/glfw3.h>
-#include <error/error.h>
-#include <monitor/monitor.h>
+#include <core/error/error.h>
+#include <display/monitor/monitor.h>
 #include <stdbool.h>
 
 enum KernWindowPropsCursor {

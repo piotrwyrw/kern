@@ -28,15 +28,11 @@ endfunction()
 
 # ---- Build all modules ----
 add_subdirectory(kern/core)
-add_subdirectory(kern/window)
-add_subdirectory(kern/error)
-add_subdirectory(kern/monitor)
+add_subdirectory(kern/display)
 
 add_library(kern STATIC
         $<TARGET_OBJECTS:kern_core>
-        $<TARGET_OBJECTS:kern_window>
-        $<TARGET_OBJECTS:kern_error>
-        $<TARGET_OBJECTS:kern_monitor>)
+        $<TARGET_OBJECTS:kern_display>)
 
 use_kern_dependencies(kern)
 

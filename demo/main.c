@@ -1,3 +1,7 @@
+// This file is part of Kern, an open-source game development library.
+// Copyright (C) 2026 Vanadium Development
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #include <kern.h>
 
 int main(void) {
@@ -24,7 +28,10 @@ int main(void) {
     return 1;
   }
 
-  kern_quit();
+  if (kern_quit() != RESULT_OK) {
+    kern_print_error();
+    return 1;
+  };
 
   return 0;
 }

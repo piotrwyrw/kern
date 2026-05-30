@@ -1,4 +1,8 @@
-#include <window/window.h>
+// This file is part of Kern, an open-source game development library.
+// Copyright (C) 2026 Vanadium Development
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+#include <display/window/window.h>
 
 enum KernResult kern_window_create(struct KernWindow *window,
                                    struct KernWindowProps *props) {
@@ -38,8 +42,9 @@ enum KernResult kern_window_create(struct KernWindow *window,
   GLFW_TRY(glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE));
 
   GLFWwindow *handle = glfwCreateWindow(width, height, title, NULL, NULL);
-  if (!handle) {
-    GLFW_ERR_PROPAGATE;
+
+  if (kern_poll_glfw_error() != RESULT_OK) {
+    return RESULT_ERROR;
   }
 
   GLFW_TRY(glfwSetInputMode(handle, GLFW_CURSOR, cursor_mode));
