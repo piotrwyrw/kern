@@ -16,10 +16,9 @@ set(GLEW_USE_STATIC_LIBS ON)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
-find_package(glm REQUIRED)
 
 add_library(kern_deps INTERFACE)
-target_link_libraries(kern_deps INTERFACE OpenGL::GL GLEW::GLEW glfw glm::glm)
+target_link_libraries(kern_deps INTERFACE OpenGL::GL GLEW::GLEW glfw)
 target_include_directories(kern_deps INTERFACE ${GLEW_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/kern ${CMAKE_SOURCE_DIR}/vendor/cglm/include)
 
 function(use_kern_dependencies target)
