@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug",
+  "command": "/usr/bin/cc -DGLEW_STATIC -I/Users/piotrwyrw/vanadium/kern/include -I/Users/piotrwyrw/vanadium/kern/vendor/cglm/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -g -std=c17 -arch arm64 -fcolor-diagnostics -F/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/System/Library/Frameworks  -o CMakeFiles/kern.dir/kern/mm/memory_pool.c.o -c /Users/piotrwyrw/vanadium/kern/kern/mm/memory_pool.c",
+  "file": "/Users/piotrwyrw/vanadium/kern/kern/mm/memory_pool.c",
+  "output": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug/CMakeFiles/kern.dir/kern/mm/memory_pool.c.o"
+},
+{
+  "directory": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug",
+  "command": "/usr/bin/cc -DGLEW_STATIC -I/Users/piotrwyrw/vanadium/kern/include -I/Users/piotrwyrw/vanadium/kern/vendor/cglm/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -g -std=c17 -arch arm64 -fcolor-diagnostics -F/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/System/Library/Frameworks  -o CMakeFiles/kern.dir/kern/state/state.c.o -c /Users/piotrwyrw/vanadium/kern/kern/state/state.c",
+  "file": "/Users/piotrwyrw/vanadium/kern/kern/state/state.c",
+  "output": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug/CMakeFiles/kern.dir/kern/state/state.c.o"
+},
+{
+  "directory": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug",
+  "command": "/usr/bin/cc -DGLEW_STATIC -I/Users/piotrwyrw/vanadium/kern/include -I/Users/piotrwyrw/vanadium/kern/vendor/cglm/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -g -std=c17 -arch arm64 -fcolor-diagnostics -F/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/System/Library/Frameworks  -o CMakeFiles/kern.dir/kern/error/error.c.o -c /Users/piotrwyrw/vanadium/kern/kern/error/error.c",
+  "file": "/Users/piotrwyrw/vanadium/kern/kern/error/error.c",
+  "output": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug/CMakeFiles/kern.dir/kern/error/error.c.o"
+},
+{
+  "directory": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug",
+  "command": "/usr/bin/cc -DGLEW_STATIC -I/Users/piotrwyrw/vanadium/kern/include -I/Users/piotrwyrw/vanadium/kern/vendor/cglm/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -g -arch arm64 -fcolor-diagnostics -F/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/System/Library/Frameworks  -o CMakeFiles/kern_test.dir/test/main.c.o -c /Users/piotrwyrw/vanadium/kern/test/main.c",
+  "file": "/Users/piotrwyrw/vanadium/kern/test/main.c",
+  "output": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug/CMakeFiles/kern_test.dir/test/main.c.o"
+},
+{
+  "directory": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug",
+  "command": "/usr/bin/cc -DGLEW_STATIC -I/Users/piotrwyrw/vanadium/kern/include -I/Users/piotrwyrw/vanadium/kern/vendor/cglm/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -g -arch arm64 -fcolor-diagnostics -F/Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/System/Library/Frameworks  -o CMakeFiles/kern_demo.dir/demo/main.c.o -c /Users/piotrwyrw/vanadium/kern/demo/main.c",
+  "file": "/Users/piotrwyrw/vanadium/kern/demo/main.c",
+  "output": "/Users/piotrwyrw/vanadium/kern/cmake-build-debug/CMakeFiles/kern_demo.dir/demo/main.c.o"
+}
+]

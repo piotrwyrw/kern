@@ -1,15 +1,39 @@
-cmake_minimum_required(VERSION 4.2.2)
+cmake_minimum_required(VERSION 3.14)
 
-project(kern)
+set(KERN_VERSION 1.0.0 CACHE STRING "Kern Version")
+set(KERN_DESCRIPTION "An Open Source C Game Development Framework" CACHE
+        STRING "Kern Description")
+set(KERN_AUTHOR "Vanadium Development" CACHE STRING "Kern Author")
+set(KERN_COPY_YEAR 2026 CACHE STRING "Kern Release Year")
 
-set(CMAKE_C_STANDARD 17)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS OFF)
+set(BUILD_DIR "${CMAKE_SOURCE_DIR}/build" CACHE STRING "Build Directory")
 
-file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/lib)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+option(EXPORT_COMPILE_COMMANDS "Export Compile Commands JSON" ON)
+
+message("
+ /$$   /$$
+| $$  /$$/
+| $$ /$$/   /$$$$$$   /$$$$$$  /$$$$$$$
+| $$$$$/   /$$__  $$ /$$__  $$| $$__  $$
+| $$  $$  | $$$$$$$$| $$  \\__/| $$  \\ $$
+| $$\\  $$ | $$_____/| $$      | $$  | $$
+| $$ \\  $$|  $$$$$$$| $$      | $$  | $$
+|__/  \\__/ \\_______/|__/      |__/  |__/
+V${KERN_VERSION} - ${KERN_DESCRIPTION}
+(C) ${KERN_COPY_YEAR} ${KERN_AUTHOR}
+")
+
+# ----------------------------------------------------------------------------------------------------------------
+
+project(src
+        VERSION ${KERN_VERSION}
+        DESCRIPTION "Kern: ${KERN_DESCRIPTION}"
+        LANGUAGES C)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ${EXPORT_COMPILE_COMMANDS})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # ---- Find all required libs ----
 set(GLEW_USE_STATIC_LIBS ON)
@@ -17,28 +41,31 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 
-add_library(kern_deps INTERFACE)
-target_link_libraries(kern_deps INTERFACE OpenGL::GL GLEW::GLEW glfw)
-target_include_directories(kern_deps INTERFACE ${GLEW_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/kern ${CMAKE_SOURCE_DIR}/vendor/cglm/include)
-
-function(use_kern_dependencies target)
-    target_link_libraries(${target} PUBLIC kern_deps)
-endfunction()
-
-# ---- Build all modules ----
-add_subdirectory(kern/core)
-add_subdirectory(kern/display)
-
+# ---- Build the Kern Library ----
 add_library(kern STATIC
-        $<TARGET_OBJECTS:kern_core>
-        $<TARGET_OBJECTS:kern_display>)
+        src/mm/memory_pool.c
+        src/state/state.c
+        src/error/error.c
+        src/window/window.c)
 
-use_kern_dependencies(kern)
+set_target_properties(kern PROPERTIES
+        C_STANDARD 17
+        C_STANDARD_REQUIRED ON
+        C_EXTENSIONS OFF)
+
+add_library(kern::kern ALIAS kern)
+
+target_link_libraries(kern PUBLIC OpenGL::GL GLEW::GLEW glfw)
+target_include_directories(kern
+        PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/vendor/cglm/include)
 
 # ---- Build Smoke Test Executable ----
 add_executable(kern_test test/main.c)
-target_link_libraries(kern_test PRIVATE kern)
+target_link_libraries(kern_test PRIVATE kern::kern)
 
 # ---- Build Demo Executable ----
 add_executable(kern_demo demo/main.c)
-target_link_libraries(kern_demo PRIVATE kern)
+target_link_libraries(kern_demo PRIVATE kern::kern)
+
+# ---- One Target To Build Everything ----
+add_custom_target(kern_all DEPENDS public kern_test kern_demo)

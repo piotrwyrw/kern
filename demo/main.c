@@ -2,36 +2,28 @@
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include <kern.h>
+#include <kern/kern.h>
 
-int main(void) {
-  kern_init();
+int main(void)
+{
+	// Error err = kern_start_windowed("Hello, Kern!", 1000, 700, false);
+	Error err = kern_start_fullscreen("Hello, Kern!");
 
-  struct KernWindowProps props = {.window_width = 1500,
-                                  .window_height = 900,
-                                  .sample_count = 10,
-                                  .window_title = "Kern Engine Demo",
-                                  .cursor = WINDOW_CURSOR_DISABLED};
-  struct KernWindow window;
+	if (err.code != KERN_NO_ERROR) {
+		kern_error_print(&err);
+		return 1;
+	}
 
-  if (kern_window_create(&window, &props) != RESULT_OK) {
-    kern_print_error();
-    return 1;
-  }
+	const KernWindow *window = kern_get_window();
 
-  while (!kern_window_should_close(&window)) {
-    glfwPollEvents();
-  }
+	while (kern_is_running()) {
+		glfwPollEvents();
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glfwSwapBuffers(window->window);
+	}
 
-  if (kern_window_destroy(&window) != RESULT_OK) {
-    kern_print_error();
-    return 1;
-  }
+	kern_dispose();
 
-  if (kern_quit() != RESULT_OK) {
-    kern_print_error();
-    return 1;
-  };
-
-  return 0;
+	return 0;
 }

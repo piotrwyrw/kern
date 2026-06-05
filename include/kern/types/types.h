@@ -2,13 +2,6 @@
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#ifndef KERN_CORE_H
-#define KERN_CORE_H
-
-#include <core/error/error.h>
-
-void kern_init();
-
-enum KernResult kern_quit();
-
-#endif
+#include <kern/types/error.h>
+#include <kern/types/memory_pool.h>
+#include <kern/types/state.h>
