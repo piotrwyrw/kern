@@ -5,26 +5,8 @@
 #ifndef KERN_STATE_H
 #define KERN_STATE_H
 
-#include <kern/common.h>
 #include <kern/types/error.h>
-#include <kern/types/state.h>
-
-extern KernState g_state;
-
-bool kern__is_running();
-
-bool kern__is_uninitialized();
-
-bool kern__is_terminated();
-
-const KernState *kern__state_get();
-
-bool kern_is_running();
-
-const KernWindow *kern_get_window();
-
-Error kern__start(const char *title, int width, int height, bool resizable,
-                  GLFWmonitor *monitor);
+#include <stdbool.h>
 
 Error kern_start_fullscreen(const char *title);
 

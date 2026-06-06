@@ -57,7 +57,9 @@ add_library(kern::kern ALIAS kern)
 
 target_link_libraries(kern PUBLIC OpenGL::GL GLEW::GLEW glfw)
 target_include_directories(kern
-        PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/vendor/cglm/include)
+        PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/vendor/cglm/include
+        PRIVATE ${CMAKE_SOURCE_DIR}/private
+)
 
 # ---- Build Smoke Test Executable ----
 add_executable(kern_test test/main.c)

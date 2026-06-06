@@ -5,7 +5,7 @@
 #ifndef KERN_ERROR_H
 #define KERN_ERROR_H
 
-#include <kern/types/error.h>
+#include <kern/kern.h>
 
 #define ERROR(_code, _message)                                                 \
   (Error) {                                                                    \
@@ -15,7 +15,7 @@
 
 #define OK() ERROR(KERN_NO_ERROR, "No error")
 
-#define PROPAGATE_GLFW                                                         \
+#define PROPAGATE_GLFW_ERROR()                                                         \
   do {                                                                         \
     const char *_glfw_err_desc;                                                \
     if (glfwGetError(&_glfw_err_desc) != GLFW_NO_ERROR) {                      \
@@ -26,9 +26,9 @@
 #define TRY_GLFW(call)                                                         \
   do {                                                                         \
     call;                                                                      \
-    PROPAGATE_GLFW;                                                            \
+    PROPAGATE_GLFW_ERROR();                                                    \
   } while (0)
 
-void kern_error_print(const Error *error);
+void kern_print_error(const Error *error);
 
 #endif // KERN_ERROR_H

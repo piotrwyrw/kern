@@ -10,17 +10,8 @@ int main(void)
 	Error err = kern_start_fullscreen("Hello, Kern!");
 
 	if (err.code != KERN_NO_ERROR) {
-		kern_error_print(&err);
+		kern_print_error(&err);
 		return 1;
-	}
-
-	const KernWindow *window = kern_get_window();
-
-	while (kern_is_running()) {
-		glfwPollEvents();
-		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glfwSwapBuffers(window->window);
 	}
 
 	kern_dispose();

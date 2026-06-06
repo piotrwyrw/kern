@@ -5,20 +5,7 @@
 #ifndef KERN_WINDOW_H
 #define KERN_WINDOW_H
 
-#include <kern/common.h>
-#include <GLFW/glfw3.h>
-
-typedef struct {
-	GLFWwindow *window;
-	GLFWmonitor *monitor;
-	const char *title;
-	int width;
-	int height;
-} KernWindow;
-
-Error kern__window_create(GLFWwindow **dst, int width, int height,
-			   const char *title, bool resizable,
-			   GLFWmonitor *monitor);
+#include <kern/types/window.h>
 
 Error kern_window_create(KernWindow *window, const char *title, int width,
 			 int height, bool resizable, GLFWmonitor *monitor);

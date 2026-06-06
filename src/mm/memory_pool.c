@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <kern/memory/memory_pool.h>
 
+#include "kern/error/error.h"
+
 void kern_pool_create(MemoryPool *pool)
 {
 	pool->size = MEMORY_POOL_DEFAULT_SIZE;
@@ -13,9 +15,9 @@ void kern_pool_create(MemoryPool *pool)
 	pool->head = NULL;
 }
 
-Error kern__pool_resize(MemoryPool *pool, size_t size)
+Error kern_pool_resize(MemoryPool *pool, size_t size)
 {
-
+	return OK();
 }
 
 Error kern_pool_allocate(MemoryPool *pool, size_t size, void **ptr_dst)

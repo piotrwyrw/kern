@@ -5,20 +5,19 @@
 #ifndef KERN_TYPES_STATE_H
 #define KERN_TYPES_STATE_H
 
+#include <kern/types/state.h>
 #include <kern/window/window.h>
 
 typedef enum {
-	// The default state when nothing has been done
-	KERN_STATUS_NOT_INITIALIZED = 0,
+	// The default startup state when nothing has been done
+	KERN_STATUS_UNINITIALIZED = 0,
 
 	// Kern has been initialized and is running
-	KERN_STATUS_RUNNING = 1,
+	KERN_STATUS_INITIALIZED = 1,
 
 	// Kern was terminated. Recovery from this state is impossible.
 	KERN_STATUS_TERMINATED = 2
 } KernStatus;
-
-typedef struct GLFWwindow GLFWwindow;
 
 typedef struct {
 	KernStatus status;

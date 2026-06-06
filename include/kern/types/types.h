@@ -5,3 +5,4 @@
 #include <kern/types/error.h>
 #include <kern/types/memory_pool.h>
 #include <kern/types/state.h>
+#include <kern/types/window.h>

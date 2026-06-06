@@ -1,7 +1,7 @@
-#include <kern/window/window.h>
-#include <kern/state/state.h>
+#include <kern/kern.h>
+#include <internal/state/state.h>
 
-Error kern__window_create(GLFWwindow **dst,
+Error kern_window_create_ex(GLFWwindow **dst,
                           const int width, const int height,
                           const char *title, const bool resizable,
                           GLFWmonitor *monitor)
@@ -17,7 +17,7 @@ Error kern__window_create(GLFWwindow **dst,
 	GLFWwindow *window = glfwCreateWindow(width, height,
 	                                      title, monitor, NULL);
 
-	PROPAGATE_GLFW;
+	PROPAGATE_GLFW_ERROR();
 
 	TRY_GLFW(glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
 	TRY_GLFW(glfwMakeContextCurrent(window));
@@ -32,12 +32,12 @@ Error kern__window_create(GLFWwindow **dst,
 Error kern_window_create(KernWindow *window, const char *title, int width,
                          int height, bool resizable, GLFWmonitor *monitor)
 {
-	if (!kern__is_uninitialized()) {
+	if (KERN_STATE.status != KERN_STATUS_UNINITIALIZED) {
 		return ERROR(KERN_BAD_STATUS, "Kern is not uninitialized.");
 	}
 
 	GLFWwindow *glfw_window;
-	Error e = kern__window_create(&glfw_window, width, height, title,
+	Error e = kern_window_create_ex(&glfw_window, width, height, title,
 	                              resizable, monitor);
 
 	if (e.code != KERN_NO_ERROR) {

@@ -5,7 +5,7 @@
 #ifndef KERN_TYPES_MEMORY_POOL_H
 #define KERN_TYPES_MEMORY_POOL_H
 
-#include <kern/common.h>
+#include <stddef.h>
 
 /**
  * A fast memory pool implementation that minimizes <code>malloc()</code> calls

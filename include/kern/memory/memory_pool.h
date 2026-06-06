@@ -5,8 +5,7 @@
 #ifndef KERN_MEMORY_POOL_H
 #define KERN_MEMORY_POOL_H
 
-#include <kern/types/memory_pool.h>
-#include <kern/types/error.h>
+#include <kern/kern.h>
 
 #define MEMORY_POOL_DEFAULT_SIZE (1024)
 #define MEMORY_POOL_DEFAULT_STEP (MEMORY_POOL_DEFAULT_SIZE)
@@ -23,7 +22,7 @@ void kern_pool_create(MemoryPool *pool);
  * @param size The new size
  * @return
  */
-Error kern__pool_resize(MemoryPool *pool, size_t size);
+Error kern_pool_resize(MemoryPool *pool, size_t size);
 
 /**
  * Allocate memory on this pool
