@@ -5,14 +5,16 @@
 #pragma once
 #include <string>
 
-namespace kern {
-	struct Properties {
-		std::string title;
-		int window_width;
-		int window_height;
-		bool fullscreen;
-		bool antialiasing;
-	};
+namespace kern
+{
+    struct Properties
+    {
+        std::string title;
+        int window_width;
+        int window_height;
+        bool fullscreen;
+        bool antialiasing;
+    };
 
-	void validate_properties(const Properties &properties);
+    void validate_properties(const Properties& properties);
 }

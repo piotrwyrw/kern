@@ -7,13 +7,15 @@
 #include <kern/core/properties.hpp>
 #include <kern/core/context.hpp>
 
-namespace kern {
-	class Game {
-	public:
-		virtual ~Game() = default;
+namespace kern
+{
+    class Game
+    {
+    public:
+        virtual ~Game() = default;
 
-		virtual void on_start(Context &ctx) = 0;
-		virtual void on_update(Context &ctx, double delta_time) = 0;
-		virtual void on_quit(Context &ctx) = 0;
-	};
+        virtual void on_start(Context& ctx) = 0;
+        virtual void on_update(Context& ctx, double delta_time) = 0;
+        virtual void on_quit(Context& ctx) = 0;
+    };
 }

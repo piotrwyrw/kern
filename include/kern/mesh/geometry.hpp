@@ -7,18 +7,22 @@
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 
-namespace kern::mesh {
-	struct Vertex {
-		glm::vec3 position, normal;
-		glm::vec2 tex_coords;
-	};
+namespace kern::mesh
+{
+    struct Vertex
+    {
+        glm::vec3 position, normal;
+        glm::vec2 tex_coords;
+    };
 
-	struct Mesh {
-		std::vector<Vertex> vertices;
-		std::vector<uint32_t> indices;
-	};
+    struct Mesh
+    {
+        std::vector<Vertex> vertices;
+        std::vector<uint32_t> indices;
+    };
 
-	namespace builtin {
-		Mesh cube();
-	}
+    namespace builtin
+    {
+        Mesh cube();
+    }
 }

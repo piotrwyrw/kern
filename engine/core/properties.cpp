@@ -5,14 +5,14 @@
 #include <kern/core/properties.hpp>
 #include <kern/exception/exception.hpp>
 
-void kern::validate_properties(const Properties &properties)
+void kern::validate_properties(const Properties& properties)
 {
-	if (!properties.window_width || !properties.window_height)
-		throw exception::Exception(std::format(
-			"Game window is too small: {}x{}",
-			properties.window_width,
-			properties.window_height));
+    if (!properties.window_width || !properties.window_height)
+        throw exception::Exception(std::format(
+            "Game window is too small: {}x{}",
+            properties.window_width,
+            properties.window_height));
 
-	if (properties.title.empty())
-		throw exception::Exception("Game window title is empty");
+    if (properties.title.empty())
+        throw exception::Exception("Game window title is empty");
 }

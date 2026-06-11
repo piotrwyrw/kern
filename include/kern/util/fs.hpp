@@ -6,6 +6,7 @@
 
 #include <string>
 
-namespace kern::fs {
-	std::string read_text_file(const std::string &path);
+namespace kern::fs
+{
+    std::string read_text_file(const std::string& path);
 }

@@ -8,16 +8,25 @@
 
 struct GLFWwindow;
 
-namespace kern::platform {
-	class Window {
-		const Properties &properties_;
-		GLFWwindow *window_;
+namespace kern { class Engine; }
 
-	public:
-		explicit Window(const Properties &properties);
-		~Window();
+namespace kern::platform
+{
+    class Window
+    {
+    private:
+        const Properties& properties_;
+        GLFWwindow* window_;
 
-		[[nodiscard]] bool should_close() const;
-		void swap_buffers() const;
-	};
+        friend class kern::Engine;
+
+        void tick();
+
+    public:
+        explicit Window(const Properties& properties);
+        ~Window();
+
+        [[nodiscard]] bool should_close() const;
+        void swap_buffers() const;
+    };
 }

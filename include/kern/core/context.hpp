@@ -4,19 +4,23 @@
 
 #pragma once
 
+#include <memory>
+
 #include "timing.hpp"
 
-namespace kern {
-	class Context {
-		Timing timing_;
-		bool should_close_;
+namespace kern
+{
+    class Context
+    {
+        std::unique_ptr<Timing> timing_;
+        bool should_close_;
 
-	public:
-		Context();
+    public:
+        Context();
 
-		[[nodiscard]] Timing &get_timing();
+        [[nodiscard]] Timing& get_timing() const;
 
-		[[nodiscard]] bool should_close() const;
-		void request_shutdown();
-	};
+        [[nodiscard]] bool should_close() const;
+        void request_shutdown();
+    };
 }

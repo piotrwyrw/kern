@@ -5,43 +5,47 @@
 #include <format>
 
 #include <kern/gl.hpp>
+#include <kern/rendering/renderer.hpp>
+#include <kern/core/game.hpp>
 #include <kern/core/engine.hpp>
+#include <kern/core/context.hpp>
 #include <kern/exception/exception.hpp>
 #include <utility>
 
-kern::Engine::Engine(std::shared_ptr<Game> game, const Properties &properties)
-	: context_({}),
-	  game_(std::move(game)),
-	  properties_(properties),
-	  window_({ properties_ }),
-	  renderer_(window_)
+kern::Engine::Engine(std::unique_ptr<Game> game, const Properties& properties)
+    : properties_(properties),
+      context_(std::make_unique<Context>()),
+      game_(std::move(game)),
+      window_(std::make_unique<platform::Window>(properties)),
+      renderer_(std::make_unique<rendering::Renderer>(*window_))
 {
-	run();
+    run();
 }
 
 [[nodiscard]] bool kern::Engine::should_close() const
 {
-	return context_.should_close() || window_.should_close();
+    return context_->should_close() || window_->should_close();
 }
 
 void kern::Engine::run()
 {
-	game_->on_start(context_);
+    game_->on_start(*context_);
 
-	auto &timing = context_.get_timing();
+    auto& timing = context_->get_timing();
 
-	while (!should_close()) {
-		timing.start_frame();
+    while (!should_close())
+    {
+        timing.start_frame();
 
-		glfwPollEvents();
+        window_->tick();
 
-		game_->on_update(context_, timing.get_delta_time());
+        game_->on_update(*context_, timing.get_delta_time());
+        renderer_->render_current();
 
-		renderer_.render_current();
-		window_.swap_buffers();
+        window_->swap_buffers();
 
-		timing.end_frame();
-	}
+        timing.end_frame();
+    }
 
-	game_->on_quit(context_);
+    game_->on_quit(*context_);
 }

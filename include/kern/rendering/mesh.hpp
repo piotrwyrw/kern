@@ -8,14 +8,16 @@
 
 #include "kern/mesh/geometry.hpp"
 
-namespace kern::rendering {
-	class GpuMesh {
-		GLuint vbo_;
-		GLuint vao_;
-		GLuint ebo_;
+namespace kern::rendering
+{
+    class GpuMesh
+    {
+        GLuint vbo_;
+        GLuint vao_;
+        GLuint ebo_;
 
-	public:
-		GpuMesh(const mesh::Mesh &mesh);
-		~GpuMesh();
-	};
+    public:
+        GpuMesh(const mesh::Mesh& mesh);
+        ~GpuMesh();
+    };
 }

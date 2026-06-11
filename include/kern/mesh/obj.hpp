@@ -6,7 +6,8 @@
 
 #include <kern/mesh/geometry.hpp>
 
-namespace kern::mesh {
-	Mesh load_obj_mesh(const std::string &filename);
-	Mesh load_obj_source_mesh(const std::string &source);
+namespace kern::mesh
+{
+    Mesh load_obj_mesh(const std::string& filename);
+    Mesh load_obj_source_mesh(const std::string& source);
 }

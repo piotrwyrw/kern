@@ -4,3 +4,4 @@ CMakeFiles
 Makefile
 build/
 .cache/
+compile_commands.json

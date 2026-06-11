@@ -6,5 +6,5 @@
 
 kern::mesh::Mesh kern::mesh::builtin::cube()
 {
-	return {};
+    return {};
 }

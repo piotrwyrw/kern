@@ -8,28 +8,29 @@
 #include <kern/platform/window.hpp>
 #include <kern/core/game.hpp>
 
-namespace kern {
-	class Engine {
-		Context context_;
+namespace kern
+{
+    class Engine
+    {
+        const Properties& properties_;
 
-		const std::shared_ptr<Game> game_;
-		const Properties &properties_;
-		const platform::Window window_;
+        std::unique_ptr<Context> context_;
+        std::unique_ptr<Game> game_;
+        std::unique_ptr<platform::Window> window_;
+        std::unique_ptr<rendering::Renderer> renderer_;
 
-		rendering::Renderer renderer_;
+    public:
+        explicit Engine(std::unique_ptr<Game> game, const Properties& properties);
 
-		void run();
+        [[nodiscard]] bool should_close() const;
 
-	public:
-		explicit Engine(std::shared_ptr<Game> game, const Properties &properties);
+        void run();
 
-		[[nodiscard]] bool should_close() const;
-
-		template <std::derived_from<Game> T> static std::unique_ptr<Engine> start(
-			const Properties &properties)
-		{
-			auto game = std::make_shared<T>();
-			return std::make_unique<Engine>(game, properties);
-		}
-	};
+        template <typename T, typename = std::is_base_of<Game, T>>
+        static std::unique_ptr<Engine> start(
+            const Properties& properties)
+        {
+            return std::make_unique<Engine>(std::make_unique<T>(), properties);
+        }
+    };
 }

@@ -6,22 +6,22 @@
 #include <kern/core/context.hpp>
 
 kern::Context::Context()
-	: timing_({}),
-	  should_close_(false)
+    : timing_(std::make_unique<Timing>()),
+      should_close_(false)
 {
 }
 
-kern::Timing &kern::Context::get_timing()
+kern::Timing& kern::Context::get_timing() const
 {
-	return timing_;
+    return *timing_;
 }
 
 bool kern::Context::should_close() const
 {
-	return should_close_;
+    return should_close_;
 }
 
 void kern::Context::request_shutdown()
 {
-	should_close_ = true;
+    should_close_ = true;
 }

@@ -5,13 +5,13 @@
 #include <kern/mesh/obj.hpp>
 #include <kern/util/fs.hpp>
 
-kern::mesh::Mesh load_obj_mesh(const std::string &filename)
+kern::mesh::Mesh load_obj_mesh(const std::string& filename)
 {
-	return kern::mesh::load_obj_source_mesh(kern::fs::read_text_file(filename));
+    return kern::mesh::load_obj_source_mesh(kern::fs::read_text_file(filename));
 }
 
 
-kern::mesh::Mesh kern::mesh::load_obj_source_mesh(const std::string &source)
+kern::mesh::Mesh kern::mesh::load_obj_source_mesh(const std::string& source)
 {
-	return {};
+    return {};
 }

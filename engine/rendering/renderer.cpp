@@ -5,18 +5,18 @@
 #include <gl/glew.h>
 #include <kern/rendering/renderer.hpp>
 
-kern::rendering::Renderer::Renderer(const platform::Window &window)
-	: window_(window)
+kern::rendering::Renderer::Renderer(kern::platform::Window& window)
+    : window_(window)
 {
 }
 
 void kern::rendering::Renderer::clear()
 {
-	glClearColor(0, 0, 0, 1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void kern::rendering::Renderer::render_current()
 {
-	clear();
+    clear();
 }

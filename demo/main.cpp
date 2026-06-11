@@ -6,29 +6,30 @@
 #include <thread>
 #include <chrono>
 
-class DemoGame : public kern::Game {
+class DemoGame : public kern::Game
+{
 public:
-	void on_start(kern::Context &ctx) override
-	{
-	}
+    void on_start(kern::Context& ctx) override
+    {
+    }
 
-	void on_update(kern::Context &ctx, double delta_time) override
-	{
-	}
+    void on_update(kern::Context& ctx, double delta_time) override
+    {
+    }
 
-	void on_quit(kern::Context &ctx) override
-	{
-	}
+    void on_quit(kern::Context& ctx) override
+    {
+    }
 };
 
 int main()
 {
-	kern::Engine::start<DemoGame>({
-		.title = "Kern Demo Game",
-		.window_width = 1500,
-		.window_height = 900,
-		.fullscreen = true,
-		.antialiasing = true
-	});
-	return 0;
+    kern::Engine::start<DemoGame>({
+        .title = "Kern Demo Game",
+        .window_width = 1500,
+        .window_height = 900,
+        .fullscreen = false,
+        .antialiasing = true
+    });
+    return 0;
 }

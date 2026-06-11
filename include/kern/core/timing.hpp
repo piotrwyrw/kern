@@ -4,18 +4,28 @@
 
 #pragma once
 
-namespace kern {
-	class Timing {
-		double frame_start_time_;
-		double frame_delta_time_;
+namespace kern
+{
+    class Engine;
+}
 
-		void start_frame();
-		void end_frame();
+namespace kern
+{
+    class Timing
+    {
+        double frame_start_time_;
+        double frame_delta_time_;
 
-		friend class Engine;
+        void start_frame();
+        void end_frame();
 
-	public:
-		[[nodiscard]] double get_time_now() const;
-		[[nodiscard]] double get_delta_time() const;
-	};
+        friend class kern::Engine;
+
+    public:
+        Timing();
+
+        [[nodiscard]] static double get_time_now();
+
+        [[nodiscard]] double get_delta_time() const;
+    };
 }
