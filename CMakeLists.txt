@@ -26,9 +26,7 @@ find_package(glm CONFIG REQUIRED)
 # ---- Build Dependencies ----
 #
 
-add_library(log STATIC vendor/log/src/log.c)
-target_compile_features(log PRIVATE c_std_11)
-target_compile_definitions(log PRIVATE LOG_USE_COLOR)
+add_subdirectory(vendor/spdlog)
 
 add_library(tinyfiledialogs STATIC
         ${CMAKE_SOURCE_DIR}/vendor/tinyfiledialogs/tinyfiledialogs.c)
@@ -54,10 +52,17 @@ add_library(kern STATIC
         engine/util/fs.cpp
         engine/mesh/builtin.cpp
         include/kern/rendering/mesh.hpp
-        engine/rendering/mesh.cpp)
+        engine/rendering/mesh.cpp
+        include/kern/logging/logging.hpp
+        engine/logging/logging.cpp
+        include/kern/kern.hpp
+        include/kern/version.hpp
+        include/kern/controls/controls.hpp
+        engine/controls/controls.cpp
+        include/kern/controls/Key.hpp)
 
 target_link_libraries(kern PUBLIC
-        log
+        spdlog::spdlog
         tinyfiledialogs
         OpenGL::GL GLEW::GLEW
         glfw
@@ -68,7 +73,6 @@ target_include_directories(kern
         ${CMAKE_SOURCE_DIR}/include
 
         PRIVATE
-        ${CMAKE_SOURCE_DIR}/vendor/log/src
         ${CMAKE_SOURCE_DIR}/vendor/tinyfiledialogs
 )
 

@@ -10,16 +10,21 @@
 #include <kern/core/engine.hpp>
 #include <kern/core/context.hpp>
 #include <kern/exception/exception.hpp>
-#include <utility>
+#include <kern/version.hpp>
+#include <kern/logging/logging.hpp>
 
 kern::Engine::Engine(std::unique_ptr<Game> game, const Properties& properties)
-    : properties_(properties),
-      context_(std::make_unique<Context>()),
+    : logger_(std::move(log::create_logger(spdlog::level::debug))),
+      properties_(properties),
       game_(std::move(game)),
       window_(std::make_unique<platform::Window>(properties)),
-      renderer_(std::make_unique<rendering::Renderer>(*window_))
+      renderer_(std::make_unique<rendering::Renderer>(*window_)),
+      context_(std::make_unique<Context>(*window_))
 {
-    run();
+    exception::handle_all(*logger_, [&]() -> void
+    {
+        run();
+    });
 }
 
 [[nodiscard]] bool kern::Engine::should_close() const
@@ -29,6 +34,8 @@ kern::Engine::Engine(std::unique_ptr<Game> game, const Properties& properties)
 
 void kern::Engine::run()
 {
+    logger_->info("Starting Kern " KERN_VERSION);
+
     game_->on_start(*context_);
 
     auto& timing = context_->get_timing();
@@ -37,7 +44,7 @@ void kern::Engine::run()
     {
         timing.start_frame();
 
-        window_->tick();
+        window_->handle_events();
 
         game_->on_update(*context_, timing.get_delta_time());
         renderer_->render_current();

@@ -2,9 +2,8 @@
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include <kern/core/engine.hpp>
-#include <thread>
-#include <chrono>
+#include <kern/kern.hpp>
+#include <iostream>
 
 class DemoGame : public kern::Game
 {
@@ -15,6 +14,16 @@ public:
 
     void on_update(kern::Context& ctx, double delta_time) override
     {
+        auto& handler = ctx.get_input_handler();
+        if (handler.is_key_pressed(kern::controls::Key::F))
+        {
+            std::cout << "Key F PRESSED!" << std::endl;
+        }
+
+        if (handler.is_key_released(kern::controls::Key::F))
+        {
+            std::cout << "Key F RELEASED!" << std::endl;
+        }
     }
 
     void on_quit(kern::Context& ctx) override
@@ -31,5 +40,6 @@ int main()
         .fullscreen = false,
         .antialiasing = true
     });
+
     return 0;
 }

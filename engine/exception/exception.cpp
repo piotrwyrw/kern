@@ -5,6 +5,8 @@
 #include <kern/exception/exception.hpp>
 #include <tinyfiledialogs.h>
 
+#include "spdlog/spdlog.h"
+
 kern::exception::Exception::Exception(std::string message)
     : message_(std::move(message))
 {
@@ -20,7 +22,12 @@ void kern::exception::show_message_box(const Exception& e)
     tinyfd_messageBox("Error", e.what(), "ok", "error", 0);
 }
 
-void kern::exception::handle_all(const std::function<void()>& fn)
+void kern::exception::log(spdlog::logger& logger, const Exception& e)
+{
+    logger.error(e.what());
+}
+
+void kern::exception::handle_all(spdlog::logger& logger, const std::function<void()>& fn)
 {
     try
     {
@@ -28,6 +35,7 @@ void kern::exception::handle_all(const std::function<void()>& fn)
     }
     catch (Exception& e)
     {
+        log(logger, e);
         show_message_box(e);
     }
 }

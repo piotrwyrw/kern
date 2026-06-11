@@ -6,9 +6,9 @@
 
 #include <kern/core/properties.hpp>
 
-struct GLFWwindow;
+#include "kern/controls/controls.hpp"
 
-namespace kern { class Engine; }
+struct GLFWwindow;
 
 namespace kern::platform
 {
@@ -18,15 +18,17 @@ namespace kern::platform
         const Properties& properties_;
         GLFWwindow* window_;
 
-        friend class kern::Engine;
-
-        void tick();
+        std::unique_ptr<controls::InputHandler> input_handler_;
 
     public:
         explicit Window(const Properties& properties);
         ~Window();
 
-        [[nodiscard]] bool should_close() const;
+        void handle_events() const;
         void swap_buffers() const;
+
+        [[nodiscard]] GLFWwindow* glfw_handle() const;
+        [[nodiscard]] bool should_close() const;
+        [[nodiscard]] const controls::InputHandler& input_handler() const;
     };
 }

@@ -8,17 +8,29 @@
 
 #include "timing.hpp"
 
+namespace kern::platform
+{
+    class Window;
+}
+
+namespace kern::controls
+{
+    class InputHandler;
+}
+
 namespace kern
 {
     class Context
     {
         std::unique_ptr<Timing> timing_;
+        const platform::Window& window_;
         bool should_close_;
 
     public:
-        Context();
+        Context(const platform::Window& window);
 
         [[nodiscard]] Timing& get_timing() const;
+        [[nodiscard]] const controls::InputHandler& get_input_handler() const;
 
         [[nodiscard]] bool should_close() const;
         void request_shutdown();
