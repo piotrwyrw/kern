@@ -48,17 +48,36 @@ namespace kern::controls
         /* True if the key was just pressed. False if it was released or held */
         [[nodiscard]] bool is_key_pressed(Key key) const;
 
-        /* True if the key was just released. False if it was pressed or held */
-        [[nodiscard]] bool is_key_released(Key key) const;
-
         /* True if the key was held for at least 2 frames. False if it was just pressed or
          * released */
         [[nodiscard]] bool is_key_held(Key key) const;
 
+        /* True if the key is currently pressed */
+        [[nodiscard]] bool is_key_down(Key key) const;
+
+
+        /* True if the key was just released. False if it was pressed or held */
+        [[nodiscard]] bool is_key_released(Key key) const;
+
+        /* True if the key was not pressed (up) for at least 2 frames. False if it was just
+         * released or pressed */
+        [[nodiscard]] bool is_key_held_up(Key key) const;
+
         /* True if the key is not currently pressed */
         [[nodiscard]] bool is_key_up(Key key) const;
 
-        /* True if the key is currently pressed */
-        [[nodiscard]] bool is_key_down(Key key) const;
+
+        [[nodiscard]] glm::dvec2 cursor_position() const;
+
+        [[nodiscard]] glm::dvec2 cursor_direction() const;
+
+        [[nodiscard]] glm::dvec2 cursor_delta() const;
+
+        [[nodiscard]] double cursor_speed() const;
+
+        /**
+         * @return True if the cursor moved during this frame
+         */
+        [[nodiscard]] bool cursor_moved() const;
     };
 }

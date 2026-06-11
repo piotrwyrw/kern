@@ -6,6 +6,8 @@
 #include <kern/controls/controls.hpp>
 #include <kern/platform/window.hpp>
 
+#include <glm/geometric.hpp>
+
 namespace kern::controls
 {
     InputHandler::InputHandler(platform::Window& window)
@@ -13,7 +15,7 @@ namespace kern::controls
           window_handle_(window.glfw_handle()),
           is_first_cursor_event_(true),
           cursor_curr_(0.0, 0.0),
-          cursor_prev_(0.0)
+          cursor_prev_(0.0, 0.0)
     {
         // Smuggle the handler instance to the static handler methods
         glfwSetWindowUserPointer(window_handle_, this);
@@ -30,7 +32,7 @@ namespace kern::controls
 
     void InputHandler::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        if (key == GLFW_KEY_UNKNOWN || key < 0 || key > sizeof(keys_curr_))
+        if (key == GLFW_KEY_UNKNOWN || key < 0 || key > GLFW_KEY_LAST)
             return;
 
         auto* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
@@ -62,16 +64,30 @@ namespace kern::controls
         return keys_curr_[key_] && (!keys_prev_[key_]);
     }
 
+    bool InputHandler::is_key_held(Key key) const
+    {
+        auto key_ = static_cast<int>(key);
+        return keys_curr_[key_] && keys_prev_[key_];
+    }
+
+    bool InputHandler::is_key_down(Key key) const
+    {
+        auto key_ = static_cast<int>(key);
+        return keys_curr_[key_];
+    }
+
+
     bool InputHandler::is_key_released(Key key) const
     {
         auto key_ = static_cast<int>(key);
         return (!keys_curr_[key_]) && keys_prev_[key_];
     }
 
-    bool InputHandler::is_key_held(Key key) const
+
+    bool InputHandler::is_key_held_up(Key key) const
     {
         auto key_ = static_cast<int>(key);
-        return keys_curr_[key_] && keys_prev_[key_];
+        return (!keys_curr_[key_]) && (!keys_prev_[key_]);
     }
 
     bool InputHandler::is_key_up(Key key) const
@@ -80,9 +96,33 @@ namespace kern::controls
         return !keys_curr_[key_];
     }
 
-    bool InputHandler::is_key_down(Key key) const
+
+    glm::dvec2 InputHandler::cursor_position() const
     {
-        auto key_ = static_cast<int>(key);
-        return keys_curr_[key_];
+        return cursor_curr_;
+    }
+
+    glm::dvec2 InputHandler::cursor_direction() const
+    {
+        auto delta = cursor_delta();
+        if (glm::length(delta) == 0.0)
+            return delta;
+
+        return glm::normalize(delta);
+    }
+
+    glm::dvec2 InputHandler::cursor_delta() const
+    {
+        return (cursor_curr_ - cursor_prev_);
+    }
+
+    double InputHandler::cursor_speed() const
+    {
+        return glm::length(cursor_delta());
+    }
+
+    bool InputHandler::cursor_moved() const
+    {
+        return cursor_delta() != glm::dvec2(0.0, 0.0);
     }
 }

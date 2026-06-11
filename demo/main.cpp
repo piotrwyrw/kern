@@ -24,6 +24,12 @@ public:
         {
             std::cout << "Key F RELEASED!" << std::endl;
         }
+
+        if (handler.cursor_moved())
+        {
+            std::cout << "Cursor speed: " << handler.cursor_direction().x << " | " << handler.
+                cursor_direction().y << std::endl;
+        }
     }
 
     void on_quit(kern::Context& ctx) override
