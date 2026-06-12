@@ -53,6 +53,10 @@ add_library(kern STATIC
         engine/logging/logging.cpp
         engine/controls/controls.cpp
         engine/core/configuration.cpp
+        include/kern/_internal.hpp
+        include/kern/scene/camera.hpp
+        engine/scene/camera.cpp
+        include/kern/scene/scene.hpp
 )
 
 target_link_libraries(kern PUBLIC
@@ -68,6 +72,7 @@ target_include_directories(kern
 
         PRIVATE
         ${CMAKE_SOURCE_DIR}/vendor/tinyfiledialogs
+        ${CMAKE_SOURCE_DIR}/vendor/stb
 )
 
 add_library(kern::kern ALIAS kern)

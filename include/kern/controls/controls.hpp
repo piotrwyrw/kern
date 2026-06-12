@@ -5,12 +5,10 @@
 #pragma once
 
 #include <kern/gl.hpp>
+#include <kern/_internal.hpp>
 #include <glm/vec2.hpp>
 
-namespace kern::platform
-{
-    class Window;
-}
+KERN_FORWARD_DECLARE_WINDOW_;
 
 struct GLFWwindow;
 

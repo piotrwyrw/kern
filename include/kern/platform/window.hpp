@@ -5,15 +5,11 @@
 #pragma once
 
 #include <kern/core/configuration.hpp>
+#include <kern/controls/controls.hpp>
 
-#include "kern/controls/controls.hpp"
+KERN_FORWARD_DECLARE_ENGINE_;
 
-struct GLFWwindow;
-
-namespace kern
-{
-    class Engine;
-}
+KERN_FORWARD_DECLARE_GLFW_WINDOW_;
 
 namespace kern::platform
 {

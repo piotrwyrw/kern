@@ -4,10 +4,9 @@
 
 #pragma once
 
-namespace kern
-{
-    class Engine;
-}
+#include <kern/_internal.hpp>
+
+KERN_FORWARD_DECLARE_ENGINE_;
 
 namespace kern
 {

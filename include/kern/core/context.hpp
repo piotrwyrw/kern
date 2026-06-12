@@ -6,23 +6,16 @@
 
 #include <memory>
 
-#include "timing.hpp"
-#include "spdlog/spdlog.h"
+#include <kern/core/timing.hpp>
+#include <kern/_internal.hpp>
 
-namespace kern::platform
-{
-    class Window;
-}
+KERN_FORWARD_DECLARE_WINDOW_;
 
-namespace kern::controls
-{
-    class InputHandler;
-}
+KERN_FORWARD_DECLARE_CONFIGURATION_;
 
-namespace spdlog
-{
-    class logger;
-}
+KERN_FORWARD_DECLARE_INPUT_HANDLER_;
+
+KERN_FORWARD_DECLARE_SPDLOG_LOGGER_;
 
 namespace kern
 {
@@ -31,17 +24,25 @@ namespace kern
         std::unique_ptr<Timing> timing_;
         spdlog::logger& logger_;
         const platform::Window& window_;
-        bool should_close_;
+
+        bool shutdown_request_;
+
+        const Configuration& config_;
 
     public:
-        Context(const platform::Window& window, spdlog::logger& logger);
+        Context(const platform::Window& window,
+                const Configuration& config,
+                spdlog::logger& logger);
 
         [[nodiscard]] spdlog::logger& logger() const;
 
         [[nodiscard]] Timing& get_timing() const;
         [[nodiscard]] const controls::InputHandler& get_input_handler() const;
 
-        [[nodiscard]] bool should_close() const;
+        [[nodiscard]] const Configuration& get_config() const;
+
+        [[nodiscard]] bool is_shutdown_requested() const;
+
         void request_shutdown();
     };
 }

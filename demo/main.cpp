@@ -15,6 +15,8 @@ public:
 
     void on_start(kern::Context& ctx) override
     {
+        auto& logger = ctx.logger();
+        logger.info("Starting {}!", ctx.get_config().title);
     }
 
     void on_update(kern::Context& ctx, double delta_time) override

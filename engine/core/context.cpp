@@ -5,15 +5,18 @@
 #include <kern/core/context.hpp>
 #include <kern/platform/window.hpp>
 
-#include "spdlog/logger.h"
+#include <spdlog/logger.h>
 
 namespace kern
 {
-    Context::Context(const platform::Window& window, spdlog::logger& logger)
+    Context::Context(const platform::Window& window,
+                     const Configuration& config,
+                     spdlog::logger& logger)
         : timing_(std::make_unique<Timing>()),
           logger_(logger),
           window_(window),
-          should_close_(false)
+          shutdown_request_(false),
+          config_(config)
     {
     }
 
@@ -32,13 +35,18 @@ namespace kern
         return window_.input_handler();
     }
 
-    bool Context::should_close() const
+    const Configuration& Context::get_config() const
     {
-        return window_.should_close() || should_close_;
+        return config_;
+    }
+
+    bool Context::is_shutdown_requested() const
+    {
+        return shutdown_request_;
     }
 
     void Context::request_shutdown()
     {
-        should_close_ = true;
+        shutdown_request_ = true;
     }
 }
