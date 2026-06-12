@@ -49,15 +49,11 @@ add_library(kern STATIC
         engine/mesh/obj.cpp
         engine/util/fs.cpp
         engine/mesh/builtin.cpp
-        include/kern/rendering/mesh.hpp
         engine/rendering/mesh.cpp
-        include/kern/logging/logging.hpp
         engine/logging/logging.cpp
-        include/kern/kern.hpp
-        include/kern/version.hpp
-        include/kern/controls/controls.hpp
         engine/controls/controls.cpp
-        include/kern/controls/Key.hpp)
+        engine/core/configuration.cpp
+)
 
 target_link_libraries(kern PUBLIC
         spdlog::spdlog

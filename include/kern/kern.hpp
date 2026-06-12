@@ -28,6 +28,8 @@
 
 #include <kern/util/fs.hpp>
 
+#include <kern/math/math.hpp>
+
 /**
  * The Vanadium Development(R) Kern(TM) Game Engine
  */
@@ -81,5 +83,12 @@ namespace kern::controls
  * Utils for Reading and Writing to and from Files
  */
 namespace kern::fs
+{
+}
+
+/**
+ * Math functions
+ */
+namespace kern::math
 {
 }

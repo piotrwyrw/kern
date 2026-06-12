@@ -7,7 +7,7 @@
 
 namespace kern
 {
-    enum CursorMode
+    enum class CursorMode
     {
         Enabled,
         Hidden,
@@ -16,11 +16,16 @@ namespace kern
 
     struct Configuration
     {
-        std::string title;
-        int window_width;
-        int window_height;
-        bool fullscreen;
-        int antialiasing_samples;
-        CursorMode cursor_mode;
+        std::string title = "Kern Game";
+        int window_width = 1000;
+        int window_height = 700;
+        bool window_resizable = false;
+        bool fullscreen = false;
+        int antialiasing_samples = 0;
+        CursorMode cursor_mode = CursorMode::Enabled;
     };
+
+    constexpr int DefaultAntialiasingSamples = 4;
+
+    [[nodiscard]] Configuration default_config(std::string title);
 }

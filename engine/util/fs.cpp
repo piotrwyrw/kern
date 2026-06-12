@@ -8,15 +8,18 @@
 #include <kern/util/fs.hpp>
 #include <kern/exception/exception.hpp>
 
-std::string kern::fs::read_text_file(const std::string& path)
+namespace kern::fs
 {
-    std::ifstream f(path);
-    if (!f.is_open())
+    std::string read_text_file(const std::string& path)
     {
-        throw exception::Exception(std::format("Could not open file for reading: {}", path));
-    }
+        std::ifstream f(path);
+        if (!f.is_open())
+        {
+            throw exception::Exception(std::format("Could not open file for reading: {}", path));
+        }
 
-    std::stringstream ss;
-    ss << f.rdbuf();
-    return ss.str();
+        std::stringstream ss;
+        ss << f.rdbuf();
+        return ss.str();
+    }
 }

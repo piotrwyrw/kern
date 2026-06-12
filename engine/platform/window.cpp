@@ -14,7 +14,7 @@ namespace kern::platform
         exception::glfw_try(glfwInit);
         exception::glfw_try(glfwWindowHint, GLFW_VISIBLE, GLFW_TRUE);
         exception::glfw_try(glfwWindowHint, GLFW_VISIBLE, GLFW_FALSE);
-        exception::glfw_try(glfwWindowHint, GLFW_RESIZABLE, GLFW_TRUE);
+        exception::glfw_try(glfwWindowHint, GLFW_RESIZABLE, config.window_resizable);
         exception::glfw_try(glfwWindowHint, GLFW_CONTEXT_VERSION_MAJOR, 3);
         exception::glfw_try(glfwWindowHint, GLFW_CONTEXT_VERSION_MINOR, 2);
         exception::glfw_try(glfwWindowHint, GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -47,8 +47,8 @@ namespace kern::platform
             height = video_mode->height;
         }
 
-        this->window_ = exception::glfw_try(glfwCreateWindow, width, height, config.title.c_str(),
-                                            monitor, nullptr);
+        this->window_ = exception::glfw_try(glfwCreateWindow, width, height,
+                                            config.title.c_str(), monitor, nullptr);
 
         exception::glfw_try(glfwShowWindow, window_);
         exception::glfw_try(glfwMakeContextCurrent, window_);

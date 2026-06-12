@@ -5,28 +5,31 @@
 #include <kern/gl.hpp>
 #include <kern/core/timing.hpp>
 
-kern::Timing::Timing()
-    : frame_start_time_(0.0),
-      frame_delta_time_(0.0)
+namespace kern
 {
-}
+    Timing::Timing()
+        : frame_start_time_(0.0),
+          frame_delta_time_(0.0)
+    {
+    }
 
-void kern::Timing::start_frame()
-{
-    frame_start_time_ = get_time_now();
-}
+    void Timing::start_frame()
+    {
+        frame_start_time_ = get_time_now();
+    }
 
-void kern::Timing::end_frame()
-{
-    frame_delta_time_ = get_time_now() - frame_start_time_;
-}
+    void Timing::end_frame()
+    {
+        frame_delta_time_ = get_time_now() - frame_start_time_;
+    }
 
-double kern::Timing::get_time_now() const
-{
-    return glfwGetTime();
-}
+    double Timing::get_time_now() const
+    {
+        return glfwGetTime();
+    }
 
-double kern::Timing::get_delta_time() const
-{
-    return frame_delta_time_;
+    double Timing::get_delta_time() const
+    {
+        return frame_delta_time_;
+    }
 }

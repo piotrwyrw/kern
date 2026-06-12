@@ -10,12 +10,7 @@ class DemoGame : public kern::Game
 public:
     kern::Configuration startup_config() override
     {
-        return kern::Configuration{
-            .title = "Kern Demo Game",
-            .fullscreen = true,
-            .antialiasing_samples = 4,
-            .cursor_mode = kern::Hidden
-        };
+        return {.window_resizable = true};
     }
 
     void on_start(kern::Context& ctx) override
@@ -25,20 +20,22 @@ public:
     void on_update(kern::Context& ctx, double delta_time) override
     {
         auto& handler = ctx.get_input_handler();
+        auto& logger = ctx.logger();
+
         if (handler.is_key_pressed(kern::controls::Key::F))
         {
-            std::cout << "Key F PRESSED!" << std::endl;
+            logger.info("Key F PRESSED!");
         }
 
         if (handler.is_key_released(kern::controls::Key::F))
         {
-            std::cout << "Key F RELEASED!" << std::endl;
+            logger.info("Key F RELEASED!");
         }
 
         if (handler.cursor_moved())
         {
-            std::cout << "Cursor speed: " << handler.cursor_direction().x << " | " << handler.
-                cursor_direction().y << std::endl;
+            auto loc = handler.cursor_position();
+            logger.info("Cursor location: X: {}, Y: {}", loc.x, loc.y);
         }
     }
 

@@ -8,6 +8,8 @@
 
 #include <glm/geometric.hpp>
 
+#include "kern/kern.hpp"
+
 namespace kern::controls
 {
     InputHandler::InputHandler(platform::Window& window)
@@ -42,6 +44,16 @@ namespace kern::controls
 
     void InputHandler::cursor_callback(GLFWwindow* window, double xpos, double ypos)
     {
+        int width, height;
+        exception::glfw_try(glfwGetWindowSize, window, &width, &height);
+
+        // On some platforms, GLFW still detects cursor events that are outside the window.
+        // Let's make sure the cursor is actually inside before recording it.
+        if (!math::is_inside_rect<double>(xpos, ypos, 0, 0, width, height))
+        {
+            return;
+        }
+
         auto* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
         handler->cursor_curr_.x = xpos;
         handler->cursor_curr_.y = ypos;

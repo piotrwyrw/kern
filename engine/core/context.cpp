@@ -5,29 +5,40 @@
 #include <kern/core/context.hpp>
 #include <kern/platform/window.hpp>
 
-kern::Context::Context(const platform::Window& window)
-    : window_(window),
-      timing_(std::make_unique<Timing>()),
-      should_close_(false)
-{
-}
+#include "spdlog/logger.h"
 
-kern::Timing& kern::Context::get_timing() const
+namespace kern
 {
-    return *timing_;
-}
+    Context::Context(const platform::Window& window, spdlog::logger& logger)
+        : timing_(std::make_unique<Timing>()),
+          logger_(logger),
+          window_(window),
+          should_close_(false)
+    {
+    }
 
-const kern::controls::InputHandler& kern::Context::get_input_handler() const
-{
-    return window_.input_handler();
-}
+    spdlog::logger& Context::logger() const
+    {
+        return logger_;
+    }
 
-bool kern::Context::should_close() const
-{
-    return window_.should_close() || should_close_;
-}
+    Timing& Context::get_timing() const
+    {
+        return *timing_;
+    }
 
-void kern::Context::request_shutdown()
-{
-    should_close_ = true;
+    const controls::InputHandler& Context::get_input_handler() const
+    {
+        return window_.input_handler();
+    }
+
+    bool Context::should_close() const
+    {
+        return window_.should_close() || should_close_;
+    }
+
+    void Context::request_shutdown()
+    {
+        should_close_ = true;
+    }
 }

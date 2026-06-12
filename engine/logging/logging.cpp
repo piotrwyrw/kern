@@ -7,19 +7,22 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-std::unique_ptr<spdlog::logger> kern::log::create_logger(spdlog::level::level_enum log_level)
+namespace kern::log
 {
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_level(log_level);
+    std::unique_ptr<spdlog::logger> create_logger(spdlog::level::level_enum log_level)
+    {
+        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        console_sink->set_level(log_level);
 
-    auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("kern.engine.log");
-    file_sink->set_level(log_level);
+        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("kern.engine.log");
+        file_sink->set_level(log_level);
 
-    auto logger = std::make_unique<spdlog::logger>(
-        "Kern",
-        std::initializer_list<spdlog::sink_ptr>{
-            file_sink, console_sink
-        });
+        auto logger = std::make_unique<spdlog::logger>(
+            "Kern",
+            std::initializer_list<spdlog::sink_ptr>{
+                file_sink, console_sink
+            });
 
-    return logger;
+        return logger;
+    }
 }

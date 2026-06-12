@@ -4,7 +4,10 @@
 
 #include <kern/mesh/geometry.hpp>
 
-kern::mesh::Mesh kern::mesh::builtin::cube()
+namespace kern::mesh
 {
-    return {};
+    Mesh builtin::cube()
+    {
+        return {};
+    }
 }

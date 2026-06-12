@@ -25,6 +25,7 @@ namespace kern
 
     public:
         explicit Engine(std::unique_ptr<Game> game, const Configuration& config);
+        ~Engine();
 
         [[nodiscard]] bool should_close() const;
 

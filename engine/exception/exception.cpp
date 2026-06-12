@@ -5,37 +5,40 @@
 #include <kern/exception/exception.hpp>
 #include <tinyfiledialogs.h>
 
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
-kern::exception::Exception::Exception(std::string message)
-    : message_(std::move(message))
+namespace kern::exception
 {
-}
-
-const char* kern::exception::Exception::what() const noexcept
-{
-    return message_.c_str();
-}
-
-void kern::exception::show_message_box(const Exception& e)
-{
-    tinyfd_messageBox("Error", e.what(), "ok", "error", 0);
-}
-
-void kern::exception::log(spdlog::logger& logger, const Exception& e)
-{
-    logger.error(e.what());
-}
-
-void kern::exception::handle_all(spdlog::logger& logger, const std::function<void()>& fn)
-{
-    try
+    Exception::Exception(std::string message)
+        : message_(std::move(message))
     {
-        fn();
     }
-    catch (Exception& e)
+
+    const char* Exception::what() const noexcept
     {
-        log(logger, e);
-        show_message_box(e);
+        return message_.c_str();
+    }
+
+    void show_message_box(const Exception& e)
+    {
+        tinyfd_messageBox("Error", e.what(), "ok", "error", 0);
+    }
+
+    void log(spdlog::logger& logger, const Exception& e)
+    {
+        logger.error(e.what());
+    }
+
+    void handle_all(spdlog::logger& logger, const std::function<void()>& fn)
+    {
+        try
+        {
+            fn();
+        }
+        catch (Exception& e)
+        {
+            log(logger, e);
+            show_message_box(e);
+        }
     }
 }

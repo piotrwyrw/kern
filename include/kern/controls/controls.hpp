@@ -20,7 +20,6 @@ namespace kern::controls
 
     class InputHandler
     {
-    private:
         const platform::Window& window_;
         GLFWwindow* window_handle_;
 

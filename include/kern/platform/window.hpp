@@ -19,7 +19,6 @@ namespace kern::platform
 {
     class Window
     {
-    private:
         const Configuration& config_;
         GLFWwindow* window_;
 
