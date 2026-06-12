@@ -21,12 +21,12 @@ void kern::Timing::end_frame()
     frame_delta_time_ = get_time_now() - frame_start_time_;
 }
 
-[[nodiscard]] double kern::Timing::get_time_now()
+double kern::Timing::get_time_now() const
 {
     return glfwGetTime();
 }
 
-[[nodiscard]] double kern::Timing::get_delta_time() const
+double kern::Timing::get_delta_time() const
 {
     return frame_delta_time_;
 }

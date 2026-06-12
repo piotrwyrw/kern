@@ -28,6 +28,7 @@ namespace kern::controls
     {
         glfwSetKeyCallback(window_handle_, nullptr);
         glfwSetCursorPosCallback(window_handle_, nullptr);
+        glfwSetWindowUserPointer(window_handle_, nullptr);
     }
 
     void InputHandler::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

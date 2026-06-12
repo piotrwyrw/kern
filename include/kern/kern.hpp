@@ -9,7 +9,7 @@
 #include <kern/core/context.hpp>
 #include <kern/core/engine.hpp>
 #include <kern/core/game.hpp>
-#include <kern/core/properties.hpp>
+#include <kern/core/configuration.hpp>
 
 #include <kern/exception/exception.hpp>
 

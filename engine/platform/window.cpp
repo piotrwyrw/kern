@@ -8,8 +8,8 @@
 
 namespace kern::platform
 {
-    Window::Window(const Properties& properties)
-        : properties_(properties)
+    Window::Window(const Configuration& config)
+        : config_(config)
     {
         exception::glfw_try(glfwInit);
         exception::glfw_try(glfwWindowHint, GLFW_VISIBLE, GLFW_TRUE);
@@ -19,12 +19,36 @@ namespace kern::platform
         exception::glfw_try(glfwWindowHint, GLFW_CONTEXT_VERSION_MINOR, 2);
         exception::glfw_try(glfwWindowHint, GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         exception::glfw_try(glfwWindowHint, GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        exception::glfw_try(glfwWindowHint, GLFW_SAMPLES, properties.antialiasing ? 4 : 0);
+        exception::glfw_try(glfwWindowHint, GLFW_SAMPLES, config.antialiasing_samples);
 
-        this->window_ = exception::glfw_try(
-            glfwCreateWindow, properties.window_width,
-            properties.window_height, properties.title.c_str(),
-            nullptr, nullptr);
+        GLFWmonitor* monitor = nullptr;
+        int width = config.window_width;
+        int height = config.window_height;
+
+        bool is_fullscreen = config.fullscreen || config.window_width <= 0
+            || config.window_height <= 0;
+
+        if (is_fullscreen)
+        {
+            monitor = exception::glfw_try(glfwGetPrimaryMonitor);
+            if (monitor == nullptr)
+            {
+                throw exception::Exception("Failed to detect any monitor");
+            }
+
+            const GLFWvidmode* video_mode = exception::glfw_try(glfwGetVideoMode, monitor);
+            if (video_mode == nullptr)
+            {
+                throw exception::Exception(
+                    "Failed to retrieve the video mode of the primary monitor.");
+            }
+
+            width = video_mode->width;
+            height = video_mode->height;
+        }
+
+        this->window_ = exception::glfw_try(glfwCreateWindow, width, height, config.title.c_str(),
+                                            monitor, nullptr);
 
         exception::glfw_try(glfwShowWindow, window_);
         exception::glfw_try(glfwMakeContextCurrent, window_);
@@ -38,6 +62,21 @@ namespace kern::platform
                 reinterpret_cast<const char*>(glewGetErrorString(err))));
         }
 
+        int cursor_mode;
+        switch (config.cursor_mode)
+        {
+        case CursorMode::Enabled:
+            cursor_mode = GLFW_CURSOR_NORMAL;
+            break;
+        case CursorMode::Hidden:
+            cursor_mode = GLFW_CURSOR_HIDDEN;
+            break;
+        case CursorMode::Disabled:
+            cursor_mode = GLFW_CURSOR_DISABLED;
+            break;
+        }
+
+        exception::glfw_try(glfwSetInputMode, window_, GLFW_CURSOR, cursor_mode);
         input_handler_ = std::make_unique<controls::InputHandler>(*this);
     }
 

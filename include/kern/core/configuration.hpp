@@ -7,14 +7,20 @@
 
 namespace kern
 {
-    struct Properties
+    enum CursorMode
+    {
+        Enabled,
+        Hidden,
+        Disabled
+    };
+
+    struct Configuration
     {
         std::string title;
         int window_width;
         int window_height;
         bool fullscreen;
-        bool antialiasing;
+        int antialiasing_samples;
+        CursorMode cursor_mode;
     };
-
-    void validate_properties(const Properties& properties);
 }

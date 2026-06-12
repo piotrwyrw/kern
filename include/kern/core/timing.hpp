@@ -24,7 +24,7 @@ namespace kern
     public:
         Timing();
 
-        [[nodiscard]] static double get_time_now();
+        [[nodiscard]] double get_time_now() const;
 
         [[nodiscard]] double get_delta_time() const;
     };

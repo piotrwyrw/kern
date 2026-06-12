@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <kern/core/properties.hpp>
+#include <kern/core/configuration.hpp>
 #include <kern/core/context.hpp>
 
 namespace kern
@@ -13,6 +13,8 @@ namespace kern
     {
     public:
         virtual ~Game() = default;
+
+        virtual Configuration startup_config() = 0;
 
         virtual void on_start(Context& ctx) = 0;
         virtual void on_update(Context& ctx, double delta_time) = 0;

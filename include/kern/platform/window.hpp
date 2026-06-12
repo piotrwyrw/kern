@@ -4,28 +4,35 @@
 
 #pragma once
 
-#include <kern/core/properties.hpp>
+#include <kern/core/configuration.hpp>
 
 #include "kern/controls/controls.hpp"
 
 struct GLFWwindow;
+
+namespace kern
+{
+    class Engine;
+}
 
 namespace kern::platform
 {
     class Window
     {
     private:
-        const Properties& properties_;
+        const Configuration& config_;
         GLFWwindow* window_;
 
         std::unique_ptr<controls::InputHandler> input_handler_;
 
-    public:
-        explicit Window(const Properties& properties);
-        ~Window();
-
         void handle_events() const;
         void swap_buffers() const;
+
+        friend class kern::Engine;
+
+    public:
+        explicit Window(const Configuration& config);
+        ~Window();
 
         [[nodiscard]] GLFWwindow* glfw_handle() const;
         [[nodiscard]] bool should_close() const;

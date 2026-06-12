@@ -16,7 +16,7 @@ namespace kern
     {
         std::unique_ptr<spdlog::logger> logger_;
 
-        const Properties& properties_;
+        const Configuration& config_;
 
         std::unique_ptr<Game> game_;
         std::unique_ptr<platform::Window> window_;
@@ -24,23 +24,23 @@ namespace kern
         std::unique_ptr<Context> context_;
 
     public:
-        explicit Engine(std::unique_ptr<Game> game, const Properties& properties);
+        explicit Engine(std::unique_ptr<Game> game, const Configuration& config);
 
         [[nodiscard]] bool should_close() const;
 
-        void run();
+        void run() const;
 
         /**
          * Initialize and Start a Kern Game
          * @tparam T The game class. Must be an implementation of the <code>kern::Game</code> class
-         * @param properties Properties required for startup. An instance of
-         * <code>kern::Properties</code>
          * @return A <code>std::unique_ptr<Engine></code> created for this game
          */
         template <typename T, typename = std::is_base_of<Game, T>>
-        static std::unique_ptr<Engine> start(const Properties& properties)
+        static std::unique_ptr<Engine> start()
         {
-            return std::make_unique<Engine>(std::make_unique<T>(), properties);
+            std::unique_ptr<Game> instance = std::make_unique<T>();
+            auto cfg = instance->startup_config();
+            return std::make_unique<Engine>(std::move(instance), std::move(cfg));
         }
     };
 }

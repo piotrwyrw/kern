@@ -43,8 +43,6 @@ add_library(kern STATIC
         engine/core/Engine.cpp
         engine/platform/window.cpp
         engine/exception/exception.cpp
-        engine/core/game.cpp
-        engine/core/properties.cpp
         engine/core/context.cpp
         engine/core/timing.cpp
         engine/rendering/renderer.cpp

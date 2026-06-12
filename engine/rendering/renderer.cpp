@@ -5,14 +5,14 @@
 #include <gl/glew.h>
 #include <kern/rendering/renderer.hpp>
 
-kern::rendering::Renderer::Renderer(kern::platform::Window& window)
+kern::rendering::Renderer::Renderer(platform::Window& window)
     : window_(window)
 {
 }
 
-void kern::rendering::Renderer::clear()
+void kern::rendering::Renderer::clear() // NOLINT(*-convert-member-functions-to-static)
 {
-    glClearColor(0, 0, 0, 1);
+    glClearColor(0, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

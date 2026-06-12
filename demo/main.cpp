@@ -8,6 +8,16 @@
 class DemoGame : public kern::Game
 {
 public:
+    kern::Configuration startup_config() override
+    {
+        return kern::Configuration{
+            .title = "Kern Demo Game",
+            .fullscreen = true,
+            .antialiasing_samples = 4,
+            .cursor_mode = kern::Hidden
+        };
+    }
+
     void on_start(kern::Context& ctx) override
     {
     }
@@ -39,13 +49,6 @@ public:
 
 int main()
 {
-    kern::Engine::start<DemoGame>({
-        .title = "Kern Demo Game",
-        .window_width = 1500,
-        .window_height = 900,
-        .fullscreen = false,
-        .antialiasing = true
-    });
-
+    kern::Engine::start<DemoGame>();
     return 0;
 }

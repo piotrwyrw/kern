@@ -31,6 +31,10 @@ namespace kern::exception
     template <typename F, typename... Args>
     auto glfw_try(F&& f, Args&&... args)
     {
+        static_assert(std::is_invocable<F, Args...>::value,
+                      "kern::exception::glfw_try: Function not callable with the provided "
+                      "arguments");
+
         auto check_error = []() -> void
         {
             const char* error_description;
@@ -41,7 +45,7 @@ namespace kern::exception
             }
         };
 
-        if constexpr (std::is_void_v<std::invoke_result_t<F, Args...>>)
+        if constexpr (std::is_void<std::invoke_result_t<F, Args...>>::value)
         {
             std::forward<F>(f)(std::forward<Args>(args)...);
             check_error();
