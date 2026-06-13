@@ -19,7 +19,7 @@ public:
         logger.info("Starting {}!", ctx.get_config().title);
     }
 
-    void on_update(kern::Context& ctx, double delta_time) override
+    void on_update(kern::Context& ctx, float delta_time) override
     {
         auto& handler = ctx.get_input_handler();
         auto& logger = ctx.logger();

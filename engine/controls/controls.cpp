@@ -55,8 +55,8 @@ namespace kern::controls
         }
 
         auto* handler = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
-        handler->cursor_curr_.x = xpos;
-        handler->cursor_curr_.y = ypos;
+        handler->cursor_curr_.x = static_cast<float>(xpos);
+        handler->cursor_curr_.y = static_cast<float>(ypos);
 
         // Avoid a cursor delta jump at the first update
         if (handler->is_first_cursor_event_)
@@ -110,12 +110,12 @@ namespace kern::controls
     }
 
 
-    glm::dvec2 InputHandler::cursor_position() const
+    glm::vec2 InputHandler::cursor_position() const
     {
         return cursor_curr_;
     }
 
-    glm::dvec2 InputHandler::cursor_direction() const
+    glm::vec2 InputHandler::cursor_direction() const
     {
         auto delta = cursor_delta();
         if (glm::length(delta) == 0.0)
@@ -124,18 +124,18 @@ namespace kern::controls
         return glm::normalize(delta);
     }
 
-    glm::dvec2 InputHandler::cursor_delta() const
+    glm::vec2 InputHandler::cursor_delta() const
     {
         return (cursor_curr_ - cursor_prev_);
     }
 
-    double InputHandler::cursor_speed() const
+    float InputHandler::cursor_speed() const
     {
         return glm::length(cursor_delta());
     }
 
     bool InputHandler::cursor_moved() const
     {
-        return cursor_delta() != glm::dvec2(0.0, 0.0);
+        return cursor_delta() != glm::vec2(0, 0);
     }
 }

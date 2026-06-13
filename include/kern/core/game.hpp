@@ -17,7 +17,7 @@ namespace kern
         virtual Configuration startup_config() = 0;
 
         virtual void on_start(Context& ctx) = 0;
-        virtual void on_update(Context& ctx, double delta_time) = 0;
+        virtual void on_update(Context& ctx, float delta_time) = 0;
         virtual void on_quit(Context& ctx) = 0;
     };
 }

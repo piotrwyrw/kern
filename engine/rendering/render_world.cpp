@@ -12,6 +12,11 @@ namespace kern::rendering
     {
     }
 
+    const std::vector<RenderObject>& RenderWorld::get_objects() const
+    {
+        return objects_;
+    }
+
     RenderObjectHandle RenderWorld::add_object(const RenderObject& object)
     {
         RenderObjectHandle handle{static_cast<uint32_t>(objects_.size())};

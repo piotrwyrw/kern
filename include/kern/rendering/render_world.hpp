@@ -17,6 +17,7 @@ namespace kern::rendering
     public:
         RenderWorld();
 
+        [[nodiscard]] const std::vector<RenderObject>& get_objects() const;
         [[nodiscard]] RenderObjectHandle add_object(const RenderObject& object);
         [[nodiscard]] const RenderObject& get_object(const RenderObjectHandle& handle) const;
     };

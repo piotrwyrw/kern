@@ -5,7 +5,7 @@
 #include <kern/mesh/obj.hpp>
 #include <kern/util/fs.hpp>
 
-namespace kern::mesh
+namespace kern::rendering
 {
     Mesh load_obj_mesh(const std::string& filename)
     {

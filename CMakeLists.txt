@@ -48,8 +48,7 @@ add_library(kern STATIC
         engine/rendering/renderer.cpp
         engine/mesh/obj.cpp
         engine/util/fs.cpp
-        engine/mesh/builtin.cpp
-        engine/rendering/mesh.cpp
+        engine/rendering/gpu_mesh.cpp
         engine/logging/logging.cpp
         engine/controls/controls.cpp
         engine/core/configuration.cpp
@@ -57,6 +56,8 @@ add_library(kern STATIC
         include/kern/rendering/render_world.hpp
         engine/rendering/resource_manager.cpp
         engine/rendering/render_world.cpp
+        include/kern/rendering/shader_program.hpp
+        engine/rendering/shader_program.cpp
 )
 
 target_link_libraries(kern PUBLIC

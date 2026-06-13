@@ -6,7 +6,7 @@
 
 namespace kern::rendering
 {
-    Camera::Camera(const glm::dvec3& position, const glm::dvec3& forward, const double fov)
+    Camera::Camera(const glm::vec3& position, const glm::vec3& forward, const float fov)
         : position_(position),
           forward_(glm::normalize(forward)),
           fov_(fov)
@@ -26,73 +26,73 @@ namespace kern::rendering
         backward_ = -forward_;
     }
 
-    void Camera::move(const glm::dvec3& direction, const double amount)
+    void Camera::move(const glm::vec3& direction, const float amount)
     {
         position_ += direction * amount;
     }
 
-    void Camera::move_forward(const double amount)
+    void Camera::move_forward(const float amount)
     {
         position_ += forward_ * amount;
     }
 
-    void Camera::move_backward(const double amount)
+    void Camera::move_backward(const float amount)
     {
         position_ += backward_ * amount;
     }
 
-    void Camera::move_right(const double amount)
+    void Camera::move_right(const float amount)
     {
         position_ += right_ * amount;
     }
 
-    void Camera::move_left(const double amount)
+    void Camera::move_left(const float amount)
     {
         position_ += left_ * amount;
     }
 
-    void Camera::move_up(const double amount)
+    void Camera::move_up(const float amount)
     {
         position_ += up_ * amount;
     }
 
-    void Camera::move_down(const double amount)
+    void Camera::move_down(const float amount)
     {
         position_ += down_ * amount;
     }
 
-    void Camera::set_position(const glm::dvec3& position)
+    void Camera::set_position(const glm::vec3& position)
     {
         position_ = position;
     }
 
-    void Camera::set_direction(const glm::dvec3& direction)
+    void Camera::set_direction(const glm::vec3& direction)
     {
         forward_ = glm::normalize(direction);
         recompute_direction_vectors();
     }
 
-    glm::dvec3 Camera::get_position() const
+    glm::vec3 Camera::get_position() const
     {
         return position_;
     }
 
-    glm::dvec3 Camera::get_forward() const
+    glm::vec3 Camera::get_forward() const
     {
         return forward_;
     }
 
-    glm::dvec3 Camera::get_right() const
+    glm::vec3 Camera::get_right() const
     {
         return right_;
     }
 
-    glm::dvec3 Camera::get_left() const
+    glm::vec3 Camera::get_left() const
     {
         return left_;
     }
 
-    glm::dvec3 Camera::get_up() const
+    glm::vec3 Camera::get_up() const
     {
         return up_;
     }

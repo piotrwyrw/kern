@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <kern/mesh/geometry.hpp>
+#include <kern/rendering/gpu_mesh.hpp>
 
-namespace kern::mesh
+namespace kern::rendering
 {
     Mesh load_obj_mesh(const std::string& filename);
     Mesh load_obj_source_mesh(const std::string& source);

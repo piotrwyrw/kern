@@ -13,6 +13,59 @@
 #include <kern/version.hpp>
 #include <kern/logging/logging.hpp>
 
+// TODO REMOVE THIS AFTER RENDERER TESTING!!
+auto CreateCubeMesh()
+{
+    auto mesh = std::make_unique<kern::rendering::Mesh>();
+
+    // 24 vertices (4 per face to support per-face normals and UVs)
+    // +X face (right)
+    mesh->vertices.push_back({{0.5f, -0.5f, -0.5f}, {1, 0, 0}, {0, 0}});
+    mesh->vertices.push_back({{0.5f, 0.5f, -0.5f}, {1, 0, 0}, {1, 0}});
+    mesh->vertices.push_back({{0.5f, 0.5f, 0.5f}, {1, 0, 0}, {1, 1}});
+    mesh->vertices.push_back({{0.5f, -0.5f, 0.5f}, {1, 0, 0}, {0, 1}});
+
+    // -X face (left)
+    mesh->vertices.push_back({{-0.5f, -0.5f, 0.5f}, {-1, 0, 0}, {0, 0}});
+    mesh->vertices.push_back({{-0.5f, 0.5f, 0.5f}, {-1, 0, 0}, {1, 0}});
+    mesh->vertices.push_back({{-0.5f, 0.5f, -0.5f}, {-1, 0, 0}, {1, 1}});
+    mesh->vertices.push_back({{-0.5f, -0.5f, -0.5f}, {-1, 0, 0}, {0, 1}});
+
+    // +Y face (top)
+    mesh->vertices.push_back({{-0.5f, 0.5f, -0.5f}, {0, 1, 0}, {0, 0}});
+    mesh->vertices.push_back({{-0.5f, 0.5f, 0.5f}, {0, 1, 0}, {0, 1}});
+    mesh->vertices.push_back({{0.5f, 0.5f, 0.5f}, {0, 1, 0}, {1, 1}});
+    mesh->vertices.push_back({{0.5f, 0.5f, -0.5f}, {0, 1, 0}, {1, 0}});
+
+    // -Y face (bottom)
+    mesh->vertices.push_back({{-0.5f, -0.5f, 0.5f}, {0, -1, 0}, {0, 0}});
+    mesh->vertices.push_back({{-0.5f, -0.5f, -0.5f}, {0, -1, 0}, {0, 1}});
+    mesh->vertices.push_back({{0.5f, -0.5f, -0.5f}, {0, -1, 0}, {1, 1}});
+    mesh->vertices.push_back({{0.5f, -0.5f, 0.5f}, {0, -1, 0}, {1, 0}});
+
+    // +Z face (front)
+    mesh->vertices.push_back({{-0.5f, -0.5f, 0.5f}, {0, 0, 1}, {0, 0}});
+    mesh->vertices.push_back({{0.5f, -0.5f, 0.5f}, {0, 0, 1}, {1, 0}});
+    mesh->vertices.push_back({{0.5f, 0.5f, 0.5f}, {0, 0, 1}, {1, 1}});
+    mesh->vertices.push_back({{-0.5f, 0.5f, 0.5f}, {0, 0, 1}, {0, 1}});
+
+    // -Z face (back)
+    mesh->vertices.push_back({{0.5f, -0.5f, -0.5f}, {0, 0, -1}, {0, 0}});
+    mesh->vertices.push_back({{-0.5f, -0.5f, -0.5f}, {0, 0, -1}, {1, 0}});
+    mesh->vertices.push_back({{-0.5f, 0.5f, -0.5f}, {0, 0, -1}, {1, 1}});
+    mesh->vertices.push_back({{0.5f, 0.5f, -0.5f}, {0, 0, -1}, {0, 1}});
+
+    // 12 triangles (2 per face), CCW winding order
+    for (uint32_t i = 0; i < 6; ++i)
+    {
+        uint32_t base = i * 4;
+        mesh->tri_faces.push_back({base + 0, base + 1, base + 2});
+        mesh->tri_faces.push_back({base + 0, base + 2, base + 3});
+    }
+
+    return mesh;
+}
+
 namespace kern
 {
     Engine::Engine(std::unique_ptr<Game> game, const Configuration& config)
@@ -27,6 +80,11 @@ namespace kern
           camera_(std::make_unique<rendering::Camera>(glm::dvec3(0, 0, 0),
                                                       glm::dvec3(0, 0, 1),M_PI))
     {
+        // TODO REMOVE THIS AFTER RENDERER TESTING!!
+        const auto mesh = CreateCubeMesh();
+        std::unique_ptr<rendering::GpuMesh> gpu_mesh = std::make_unique<rendering::GpuMesh>(*mesh);
+        auto a = resources_->add_mesh(std::move(gpu_mesh));
+
         exception::handle_all(*logger_, [&]() -> void
         {
             run();

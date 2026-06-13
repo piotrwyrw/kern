@@ -12,8 +12,8 @@ namespace kern
 {
     class Timing
     {
-        double frame_start_time_;
-        double frame_delta_time_;
+        float frame_start_time_;
+        float frame_delta_time_;
 
         void start_frame();
         void end_frame();
@@ -23,8 +23,8 @@ namespace kern
     public:
         Timing();
 
-        [[nodiscard]] double get_time_now() const;
+        [[nodiscard]] float get_time_now() const;
 
-        [[nodiscard]] double get_delta_time() const;
+        [[nodiscard]] float get_delta_time() const;
     };
 }

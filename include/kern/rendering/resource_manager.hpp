@@ -5,19 +5,19 @@
 #pragma once
 
 #include <vector>
-#include <kern/rendering/mesh.hpp>
+#include <kern/rendering/gpu_mesh.hpp>
 #include <kern/rendering/handles.hpp>
 
 namespace kern::rendering
 {
     class ResourceManager
     {
-        std::vector<GpuMesh> meshes_;
+        std::vector<std::unique_ptr<GpuMesh>> meshes_;
 
     public:
         ResourceManager();
 
-        [[nodiscard]] GpuMeshHandle add_mesh(const GpuMesh& mesh);
+        [[nodiscard]] GpuMeshHandle add_mesh(std::unique_ptr<GpuMesh> mesh);
         [[nodiscard]] const GpuMesh& get_mesh(const GpuMeshHandle& handle) const;
     };
 }

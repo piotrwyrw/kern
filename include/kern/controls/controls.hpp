@@ -25,8 +25,8 @@ namespace kern::controls
         bool keys_prev_[GLFW_KEY_LAST + 1] = {};
 
         bool is_first_cursor_event_;
-        glm::dvec2 cursor_curr_;
-        glm::dvec2 cursor_prev_;
+        glm::vec2 cursor_curr_;
+        glm::vec2 cursor_prev_;
 
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         static void cursor_callback(GLFWwindow* window, double xpos, double ypos);
@@ -64,13 +64,13 @@ namespace kern::controls
         [[nodiscard]] bool is_key_up(Key key) const;
 
 
-        [[nodiscard]] glm::dvec2 cursor_position() const;
+        [[nodiscard]] glm::vec2 cursor_position() const;
 
-        [[nodiscard]] glm::dvec2 cursor_direction() const;
+        [[nodiscard]] glm::vec2 cursor_direction() const;
 
-        [[nodiscard]] glm::dvec2 cursor_delta() const;
+        [[nodiscard]] glm::vec2 cursor_delta() const;
 
-        [[nodiscard]] double cursor_speed() const;
+        [[nodiscard]] float cursor_speed() const;
 
         /**
          * @return True if the cursor moved during this frame

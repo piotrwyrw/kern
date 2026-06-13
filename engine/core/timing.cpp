@@ -8,8 +8,8 @@
 namespace kern
 {
     Timing::Timing()
-        : frame_start_time_(0.0),
-          frame_delta_time_(0.0)
+        : frame_start_time_(0),
+          frame_delta_time_(0)
     {
     }
 
@@ -23,12 +23,12 @@ namespace kern
         frame_delta_time_ = get_time_now() - frame_start_time_;
     }
 
-    double Timing::get_time_now() const
+    float Timing::get_time_now() const
     {
-        return glfwGetTime();
+        return static_cast<float>(glfwGetTime());
     }
 
-    double Timing::get_delta_time() const
+    float Timing::get_delta_time() const
     {
         return frame_delta_time_;
     }

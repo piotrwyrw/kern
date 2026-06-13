@@ -15,12 +15,11 @@
 
 #include <kern/logging/logging.hpp>
 
-#include <kern/mesh/geometry.hpp>
 #include <kern/mesh/obj.hpp>
 
 #include <kern/platform/window.hpp>
 
-#include <kern/rendering/mesh.hpp>
+#include <kern/rendering/gpu_mesh.hpp>
 #include <kern/rendering/renderer.hpp>
 
 #include <kern/controls/key.hpp>

@@ -18,6 +18,8 @@ namespace kern::rendering
 
         void clear() const;
 
+        void render_mesh(const GpuMesh& mesh) const;
+
     public:
         explicit Renderer(platform::Window& window);
 
