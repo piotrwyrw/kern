@@ -4,24 +4,45 @@
 
 #pragma once
 
-#define KERN_FORWARD_DECLARE_NS_(ns, ...)   namespace ns { class __VA_ARGS__; }
-#define KERN_FORWARD_DECLARE_(c)            class c;
+#define KERN_FORWARD_DECLARE_NS_(ns, ...) \
+    namespace ns { class __VA_ARGS__; }
+
+#define KERN_FORWARD_DECLARE_(...) \
+    class __VA_ARGS__;
+
 
 // spdlog
-#define KERN_FORWARD_DECLARE_SPDLOG_LOGGER_ KERN_FORWARD_DECLARE_NS_(spdlog, logger)
+#define KERN_FORWARD_DECLARE_SPDLOG_LOGGER_ \
+    KERN_FORWARD_DECLARE_NS_(spdlog, logger)
 
 // GLFW
-#define KERN_FORWARD_DECLARE_GLFW_WINDOW_   KERN_FORWARD_DECLARE_(GLFWwindow)
+#define KERN_FORWARD_DECLARE_GLFW_WINDOW_ \
+    KERN_FORWARD_DECLARE_(GLFWwindow)
 
 // kern
-#define KERN_FORWARD_DECLARE_ENGINE_        KERN_FORWARD_DECLARE_NS_(kern, Engine)
-#define KERN_FORWARD_DECLARE_CONFIGURATION_ KERN_FORWARD_DECLARE_NS_(kern, Configuration)
+#define KERN_FORWARD_DECLARE_ENGINE_ \
+    KERN_FORWARD_DECLARE_NS_(kern, Engine)
+#define KERN_FORWARD_DECLARE_CONFIGURATION_ \
+    KERN_FORWARD_DECLARE_NS_(kern, Configuration)
 
 // kern::platform
-#define KERN_FORWARD_DECLARE_WINDOW_        KERN_FORWARD_DECLARE_NS_(kern::platform, Window)
+#define KERN_FORWARD_DECLARE_WINDOW_ \
+    KERN_FORWARD_DECLARE_NS_(kern::platform, Window)
 
 // kern::controls
-#define KERN_FORWARD_DECLARE_INPUT_HANDLER_ KERN_FORWARD_DECLARE_NS_(kern::controls, InputHandler)
+#define KERN_FORWARD_DECLARE_INPUT_HANDLER_ \
+    KERN_FORWARD_DECLARE_NS_(kern::controls, InputHandler)
 
-// kern::scene
-#define KERN_FORWARD_DECLARE_CAMERA_        KERN_FORWARD_DECLARE_NS_(kern::scene, Camera)
+// kern::rendering
+#define KERN_FORWARD_DECLARE_CAMERA_ \
+    KERN_FORWARD_DECLARE_NS_(kern::rendering, Camera)
+#define KERN_FORWARD_DECLARE_GPU_MESH \
+    KERN_FORWARD_DECLARE_NS_(kern::rendering, GpuMesh)
+#define KERN_FORWARD_DECLARE_RENDER_OBJECT \
+    KERN_FORWARD_DECLARE_NS_(kern::rendering, RenderObject)
+#define KERN_FORWARD_DECLARE_RENDER_WORLD \
+    KERN_FORWARD_DECLARE_NS_(kern::rendering, RenderWorld)
+#define KERN_FORWARD_DECLARE_RESOURCE_MANAGER \
+    KERN_FORWARD_DECLARE_NS_(kern::rendering, ResourceManager)
+#define KERN_FORWARD_DECLARE_RENDERER \
+    KERN_FORWARD_DECLARE_NS_(kern::rendering, Renderer)

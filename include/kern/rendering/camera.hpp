@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-namespace kern::scene
+namespace kern::rendering
 {
     class Camera
     {

@@ -4,10 +4,12 @@
 
 #pragma once
 
-namespace kern::scene
-{
-    class Scene
-    {
+#include <kern/rendering/handles.hpp>
 
+namespace kern::rendering
+{
+    struct RenderObject
+    {
+        GpuMeshHandle mesh_handle;
     };
 }

@@ -53,10 +53,10 @@ add_library(kern STATIC
         engine/logging/logging.cpp
         engine/controls/controls.cpp
         engine/core/configuration.cpp
-        include/kern/_internal.hpp
-        include/kern/scene/camera.hpp
         engine/scene/camera.cpp
-        include/kern/scene/scene.hpp
+        include/kern/rendering/render_world.hpp
+        engine/rendering/resource_manager.cpp
+        engine/rendering/render_world.cpp
 )
 
 target_link_libraries(kern PUBLIC

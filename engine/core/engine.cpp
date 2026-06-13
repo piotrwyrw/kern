@@ -21,7 +21,11 @@ namespace kern
           game_(std::move(game)),
           window_(std::make_unique<platform::Window>(config)),
           renderer_(std::make_unique<rendering::Renderer>(*window_)),
-          context_(std::make_unique<Context>(*window_, config, *logger_))
+          context_(std::make_unique<Context>(*window_, config, *logger_)),
+          resources_(std::make_unique<rendering::ResourceManager>()),
+          world_(std::make_unique<rendering::RenderWorld>()),
+          camera_(std::make_unique<rendering::Camera>(glm::dvec3(0, 0, 0),
+                                                      glm::dvec3(0, 0, 1),M_PI))
     {
         exception::handle_all(*logger_, [&]() -> void
         {
@@ -54,7 +58,7 @@ namespace kern
             window_->handle_events();
 
             game_->on_update(*context_, timing.get_delta_time());
-            renderer_->render_current();
+            renderer_->render(*world_, *resources_, *camera_);
 
             window_->swap_buffers();
 

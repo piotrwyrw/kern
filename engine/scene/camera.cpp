@@ -2,9 +2,9 @@
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include <kern/scene/camera.hpp>
+#include <kern/rendering/camera.hpp>
 
-namespace kern::scene
+namespace kern::rendering
 {
     Camera::Camera(const glm::dvec3& position, const glm::dvec3& forward, const double fov)
         : position_(position),

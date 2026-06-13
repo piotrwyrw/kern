@@ -5,8 +5,7 @@
 #pragma once
 
 #include <kern/gl.hpp>
-
-#include "kern/mesh/geometry.hpp"
+#include <kern/mesh/geometry.hpp>
 
 namespace kern::rendering
 {

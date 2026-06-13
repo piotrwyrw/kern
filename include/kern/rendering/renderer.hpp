@@ -6,17 +6,22 @@
 
 #include <kern/platform/window.hpp>
 
+#include <kern/rendering/camera.hpp>
+#include <kern/rendering/render_world.hpp>
+#include <kern/rendering/resource_manager.hpp>
+
 namespace kern::rendering
 {
     class Renderer
     {
         platform::Window& window_;
 
-        void clear();
+        void clear() const;
 
     public:
         explicit Renderer(platform::Window& window);
 
-        void render_current();
+        void render(const RenderWorld& world, const ResourceManager& resources,
+                    const Camera& camera) const;
     };
 }

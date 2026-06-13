@@ -12,13 +12,14 @@ namespace kern::rendering
     {
     }
 
-    void Renderer::clear()
+    void Renderer::clear() const
     {
         glClearColor(0, 0, 1, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void Renderer::render_current()
+    void Renderer::render(const RenderWorld& world, const ResourceManager& resources,
+                          const Camera& camera) const
     {
         clear();
     }

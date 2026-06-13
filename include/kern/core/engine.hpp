@@ -22,6 +22,9 @@ namespace kern
         std::unique_ptr<platform::Window> window_;
         std::unique_ptr<rendering::Renderer> renderer_;
         std::unique_ptr<Context> context_;
+        std::unique_ptr<rendering::ResourceManager> resources_;
+        std::unique_ptr<rendering::RenderWorld> world_;
+        std::unique_ptr<rendering::Camera> camera_;
 
     public:
         explicit Engine(std::unique_ptr<Game> game, const Configuration& config);

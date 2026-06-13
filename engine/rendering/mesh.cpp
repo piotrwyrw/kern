@@ -5,8 +5,6 @@
 #include <kern/gl.hpp>
 #include <kern/rendering/mesh.hpp>
 
-#include "kern/rendering/renderer.hpp"
-
 namespace kern::rendering
 {
     GpuMesh::GpuMesh(const mesh::Mesh& mesh)
