@@ -1,26 +1,36 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
 
+#include <kern/core/timing.hpp>
+
 #include <memory>
 
-#include <kern/core/timing.hpp>
-#include <kern/_internal.hpp>
-
-KERN_FORWARD_DECLARE_WINDOW_;
-
-KERN_FORWARD_DECLARE_CONFIGURATION_;
-
-KERN_FORWARD_DECLARE_INPUT_HANDLER_;
-
-KERN_FORWARD_DECLARE_SPDLOG_LOGGER_;
+namespace spdlog
+{
+    class logger;
+}
 
 namespace kern
 {
+    struct Configuration;
+
+    namespace platform
+    {
+        class Window;
+    }
+
+    namespace controls
+    {
+        class InputHandler;
+    }
+
     class Context
     {
+        const Engine& engine_;
+
         std::unique_ptr<Timing> timing_;
         spdlog::logger& logger_;
         const platform::Window& window_;
@@ -30,7 +40,8 @@ namespace kern
         const Configuration& config_;
 
     public:
-        Context(const platform::Window& window,
+        Context(const Engine& engine,
+                const platform::Window& window,
                 const Configuration& config,
                 spdlog::logger& logger);
 

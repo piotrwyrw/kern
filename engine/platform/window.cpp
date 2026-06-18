@@ -1,4 +1,4 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -20,20 +20,22 @@ namespace kern::platform
         exception::glfw_try(glfwWindowHint, GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         exception::glfw_try(glfwWindowHint, GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         exception::glfw_try(glfwWindowHint, GLFW_SAMPLES, config.antialiasing_samples);
+        exception::glfw_try(glfwWindowHint, GLFW_DECORATED, config.window_decorated);
+        exception::glfw_try(glfwWindowHint, GLFW_TRANSPARENT_FRAMEBUFFER,
+                            config.window_transparency);
 
         GLFWmonitor* monitor = nullptr;
         int width = config.window_width;
         int height = config.window_height;
 
-        bool is_fullscreen = config.fullscreen || config.window_width <= 0
-            || config.window_height <= 0;
-
-        if (is_fullscreen)
+        if (config.fullscreen
+            || config.window_width <= 0
+            || config.window_height <= 0)
         {
             monitor = exception::glfw_try(glfwGetPrimaryMonitor);
             if (monitor == nullptr)
             {
-                throw exception::Exception("Failed to detect any monitor");
+                throw exception::Exception("Failed to detect a primary monitor.");
             }
 
             const GLFWvidmode* video_mode = exception::glfw_try(glfwGetVideoMode, monitor);
@@ -47,15 +49,17 @@ namespace kern::platform
             height = video_mode->height;
         }
 
+        initial_width_ = width;
+        initial_height_ = height;
+
         this->window_ = exception::glfw_try(glfwCreateWindow, width, height,
-                                            config.title.c_str(), monitor, nullptr);
+                                            &config.title[0], monitor, nullptr);
 
         exception::glfw_try(glfwShowWindow, window_);
         exception::glfw_try(glfwMakeContextCurrent, window_);
         exception::glfw_try(glfwSwapInterval, 0);
 
-        GLenum err = glewInit();
-        if (err != GLEW_OK)
+        if (const GLenum err = glewInit(); err != GLEW_OK)
         {
             throw exception::Exception(std::format(
                 "GLEW Error: {}",
@@ -100,6 +104,16 @@ namespace kern::platform
     void Window::swap_buffers() const
     {
         exception::glfw_try(glfwSwapBuffers, window_);
+    }
+
+    int Window::get_initial_width() const
+    {
+        return initial_width_;
+    }
+
+    int Window::get_initial_height() const
+    {
+        return initial_height_;
     }
 
     GLFWwindow* Window::glfw_handle() const

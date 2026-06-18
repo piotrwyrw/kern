@@ -1,4 +1,4 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -8,7 +8,7 @@
 
 namespace kern::log
 {
-    std::unique_ptr<spdlog::logger> create_logger(spdlog::level::level_enum log_level);
+    spdlog::logger create_logger(spdlog::level::level_enum log_level);
 }
 
 /**

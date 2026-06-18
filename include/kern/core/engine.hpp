@@ -1,11 +1,14 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
 
-#include <kern/rendering/renderer.hpp>
+#include <kern/gl/resource_manager.hpp>
 #include <kern/platform/window.hpp>
+#include <kern/gfx/renderer.hpp>
+#include <kern/gfx/camera.hpp>
+#include <kern/scene/scene.hpp>
 #include <kern/core/game.hpp>
 
 #include <spdlog/logger.h>
@@ -14,25 +17,28 @@ namespace kern
 {
     class Engine
     {
-        std::unique_ptr<spdlog::logger> logger_;
-
-        const Configuration& config_;
+        spdlog::logger logger_;
 
         std::unique_ptr<Game> game_;
-        std::unique_ptr<platform::Window> window_;
-        std::unique_ptr<rendering::Renderer> renderer_;
-        std::unique_ptr<Context> context_;
-        std::unique_ptr<rendering::ResourceManager> resources_;
-        std::unique_ptr<rendering::RenderWorld> world_;
-        std::unique_ptr<rendering::Camera> camera_;
+        const Configuration& config_;
+
+        platform::Window window_;
+        gfx::Renderer renderer_;
+        Context context_;
+        gl::ResourceManager resources_;
+        scene::Scene world_;
+        gfx::Camera camera_;
 
     public:
-        explicit Engine(std::unique_ptr<Game> game, const Configuration& config);
+        explicit Engine(std::unique_ptr<Game> game,
+                        const Configuration& config);
         ~Engine();
+
+        [[nodiscard]] const platform::Window& get_window() const;
 
         [[nodiscard]] bool should_close() const;
 
-        void run() const;
+        void run();
 
         /**
          * Initialize and Start a Kern Game

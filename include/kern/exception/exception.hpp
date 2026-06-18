@@ -1,14 +1,15 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
 
+#include <glfw/glfw3.h>
+#include <spdlog/logger.h>
+
 #include <exception>
 #include <format>
 #include <functional>
-#include <glfw/glfw3.h>
-#include <spdlog/logger.h>
 
 namespace kern::exception
 {
@@ -45,7 +46,7 @@ namespace kern::exception
             }
         };
 
-        if constexpr (std::is_void<std::invoke_result_t<F, Args...>>::value)
+        if constexpr (std::is_void_v<std::invoke_result_t<F, Args...>>)
         {
             std::forward<F>(f)(std::forward<Args>(args)...);
             check_error();

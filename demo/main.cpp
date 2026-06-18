@@ -1,22 +1,32 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <kern/kern.hpp>
-#include <iostream>
 
 class DemoGame : public kern::Game
 {
 public:
     kern::Configuration startup_config() override
     {
-        return {.window_resizable = true};
+        auto cfg = kern::default_config("Kern Demo");
+        cfg.fullscreen = false;
+        cfg.window_resizable = true;
+        cfg.window_width = 1000;
+        cfg.window_height = 700;
+        cfg.cursor_mode = kern::CursorMode::Enabled;
+
+        return cfg;
     }
 
     void on_start(kern::Context& ctx) override
     {
         auto& logger = ctx.logger();
         logger.info("Starting {}!", ctx.get_config().title);
+
+        // const auto shader = kern::rendering::Shader("test.a", "test.b");
+        // const auto uniform = kern::rendering::Uniform2f(1, 2);
+        // shader.set_uniform(4, uniform);
     }
 
     void on_update(kern::Context& ctx, float delta_time) override
@@ -38,6 +48,12 @@ public:
         {
             auto loc = handler.cursor_position();
             logger.info("Cursor location: X: {}, Y: {}", loc.x, loc.y);
+        }
+
+        if (handler.just_resized())
+        {
+            logger.info("Resized to: [{}, {}]", handler.get_window_width(), handler
+                        .get_window_height());
         }
     }
 

@@ -1,4 +1,4 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -15,17 +15,22 @@
 
 #include <kern/logging/logging.hpp>
 
-#include <kern/mesh/obj.hpp>
-
 #include <kern/platform/window.hpp>
 
-#include <kern/rendering/gpu_mesh.hpp>
-#include <kern/rendering/renderer.hpp>
+#include <kern/gl/resource_manager.hpp>
+#include <kern/gl/shader.hpp>
+#include <kern/gl/mesh.hpp>
+
+#include <kern/scene/mesh_instance.hpp>
+
+#include <kern/gfx/handles.hpp>
+#include <kern/gfx/renderer.hpp>
+
 
 #include <kern/controls/key.hpp>
-#include <kern/controls/controls.hpp>
+#include <kern/controls/input_handler.hpp>
 
-#include <kern/util/fs.hpp>
+#include <kern/util/util.hpp>
 
 #include <kern/math/math.hpp>
 
@@ -51,13 +56,6 @@ namespace kern::log
 }
 
 /**
- * Mesh and Geometry Handling and Loading of Mesh Files
- */
-namespace kern::mesh
-{
-}
-
-/**
  * Platform-dependent Features, e.g. Window Creation
  */
 namespace kern::platform
@@ -67,10 +65,17 @@ namespace kern::platform
 /**
  * Rendering Features: Shading, GPU Mesh Representations, etc.
  */
-namespace kern::rendering
+namespace kern::gfx
 {
 }
 
+
+/**
+ * OpenGL-Specific Stuff
+ */
+namespace kern::gl
+{
+}
 /**
  * Handling Inputs from Control Devices
  */
@@ -81,7 +86,7 @@ namespace kern::controls
 /**
  * Utils for Reading and Writing to and from Files
  */
-namespace kern::fs
+namespace kern::util
 {
 }
 

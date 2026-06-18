@@ -1,36 +1,43 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
 
 #include <kern/core/configuration.hpp>
-#include <kern/controls/controls.hpp>
+#include <kern/controls/input_handler.hpp>
 
-KERN_FORWARD_DECLARE_ENGINE_;
-
-KERN_FORWARD_DECLARE_GLFW_WINDOW_;
-
-namespace kern::platform
+namespace kern
 {
-    class Window
+    class Engine;
+
+    namespace platform
     {
-        const Configuration& config_;
-        GLFWwindow* window_;
+        class Window
+        {
+            const Configuration& config_;
+            int initial_width_;
+            int initial_height_;
 
-        std::unique_ptr<controls::InputHandler> input_handler_;
+            GLFWwindow* window_;
 
-        void handle_events() const;
-        void swap_buffers() const;
+            std::unique_ptr<controls::InputHandler> input_handler_;
 
-        friend class kern::Engine;
+            void handle_events() const;
+            void swap_buffers() const;
 
-    public:
-        explicit Window(const Configuration& config);
-        ~Window();
+            friend class kern::Engine;
 
-        [[nodiscard]] GLFWwindow* glfw_handle() const;
-        [[nodiscard]] bool should_close() const;
-        [[nodiscard]] const controls::InputHandler& input_handler() const;
-    };
+        public:
+            explicit Window(const Configuration& config);
+            ~Window();
+
+            [[nodiscard]] int get_initial_width() const;
+            [[nodiscard]] int get_initial_height() const;
+
+            [[nodiscard]] GLFWwindow* glfw_handle() const;
+            [[nodiscard]] bool should_close() const;
+            [[nodiscard]] const controls::InputHandler& input_handler() const;
+        };
+    }
 }

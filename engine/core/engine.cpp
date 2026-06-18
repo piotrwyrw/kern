@@ -1,22 +1,23 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <format>
 
 #include <kern/gl.hpp>
-#include <kern/rendering/renderer.hpp>
+#include <kern/gfx/renderer.hpp>
+#include <kern/scene/scene.hpp>
+#include <kern/exception/exception.hpp>
 #include <kern/core/game.hpp>
 #include <kern/core/engine.hpp>
 #include <kern/core/context.hpp>
-#include <kern/exception/exception.hpp>
 #include <kern/version.hpp>
 #include <kern/logging/logging.hpp>
 
 // TODO REMOVE THIS AFTER RENDERER TESTING!!
 auto CreateCubeMesh()
 {
-    auto mesh = std::make_unique<kern::rendering::Mesh>();
+    auto mesh = std::make_unique<kern::mesh::Mesh>();
 
     // 24 vertices (4 per face to support per-face normals and UVs)
     // +X face (right)
@@ -69,23 +70,25 @@ auto CreateCubeMesh()
 namespace kern
 {
     Engine::Engine(std::unique_ptr<Game> game, const Configuration& config)
-        : logger_(std::move(log::create_logger(spdlog::level::trace))),
-          config_(config),
+        : logger_(log::create_logger(spdlog::level::trace)),
           game_(std::move(game)),
-          window_(std::make_unique<platform::Window>(config)),
-          renderer_(std::make_unique<rendering::Renderer>(*window_)),
-          context_(std::make_unique<Context>(*window_, config, *logger_)),
-          resources_(std::make_unique<rendering::ResourceManager>()),
-          world_(std::make_unique<rendering::RenderWorld>()),
-          camera_(std::make_unique<rendering::Camera>(glm::dvec3(0, 0, 0),
-                                                      glm::dvec3(0, 0, 1),M_PI))
+          config_(config),
+          window_(platform::Window(config)),
+          renderer_(gfx::Renderer(window_)),
+          context_(*this, window_, config, logger_),
+          resources_(gl::ResourceManager()),
+          world_(scene::Scene()),
+          camera_(gfx::Camera(
+              *this,
+              glm::dvec3(0, 0, 0),
+              glm::dvec3(0, 0, 1),M_PI))
     {
         // TODO REMOVE THIS AFTER RENDERER TESTING!!
-        const auto mesh = CreateCubeMesh();
-        std::unique_ptr<rendering::GpuMesh> gpu_mesh = std::make_unique<rendering::GpuMesh>(*mesh);
-        auto a = resources_->add_mesh(std::move(gpu_mesh));
+        // const auto mesh = CreateCubeMesh();
+        // std::unique_ptr<rendering::GpuMesh> gpu_mesh = std::make_unique<rendering::GpuMesh>(*mesh);
+        // auto a = resources_->add_mesh(std::move(gpu_mesh));
 
-        exception::handle_all(*logger_, [&]() -> void
+        exception::handle_all(logger_, [&]() -> void
         {
             run();
         });
@@ -93,36 +96,41 @@ namespace kern
 
     Engine::~Engine()
     {
-        logger_->info("Kern shutting down. Goodbye!");
+        logger_.info("Kern shutting down. Goodbye!");
+    }
+
+    const platform::Window& Engine::get_window() const
+    {
+        return window_;
     }
 
     bool Engine::should_close() const
     {
-        return context_->is_shutdown_requested() || window_->should_close();
+        return context_.is_shutdown_requested() || window_.should_close();
     }
 
-    void Engine::run() const
+    void Engine::run()
     {
-        logger_->info("Initializing Kern " KERN_VERSION);
+        logger_.info("Initializing Kern " KERN_VERSION);
 
-        game_->on_start(*context_);
+        game_->on_start(context_);
 
-        auto& timing = context_->get_timing();
+        auto& timing = context_.get_timing();
 
         while (!should_close())
         {
             timing.start_frame();
 
-            window_->handle_events();
+            window_.handle_events();
 
-            game_->on_update(*context_, timing.get_delta_time());
-            renderer_->render(*world_, *resources_, *camera_);
+            game_->on_update(context_, timing.get_delta_time());
+            renderer_.render(world_, resources_, camera_);
 
-            window_->swap_buffers();
+            window_.swap_buffers();
 
             timing.end_frame();
         }
 
-        game_->on_quit(*context_);
+        game_->on_quit(context_);
     }
 }

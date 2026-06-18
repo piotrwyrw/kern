@@ -1,10 +1,10 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <kern/exception/exception.hpp>
-#include <tinyfiledialogs.h>
 
+#include <tinyfiledialogs.h>
 #include <spdlog/spdlog.h>
 
 namespace kern::exception
@@ -26,7 +26,7 @@ namespace kern::exception
 
     void log(spdlog::logger& logger, const Exception& e)
     {
-        logger.error(e.what());
+        logger.critical(e.what());
     }
 
     void handle_all(spdlog::logger& logger, const std::function<void()>& fn)

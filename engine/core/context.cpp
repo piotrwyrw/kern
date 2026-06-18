@@ -1,4 +1,4 @@
-// This file is part of Kern, an open-source game development library.
+// This File is Part of the Vanadium Kern Game Engine.
 // Copyright (C) 2026 Vanadium Development
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
@@ -9,10 +9,12 @@
 
 namespace kern
 {
-    Context::Context(const platform::Window& window,
+    Context::Context(const Engine& engine,
+                     const platform::Window& window,
                      const Configuration& config,
                      spdlog::logger& logger)
-        : timing_(std::make_unique<Timing>()),
+        : engine_(engine),
+          timing_(std::make_unique<Timing>()),
           logger_(logger),
           window_(window),
           shutdown_request_(false),
