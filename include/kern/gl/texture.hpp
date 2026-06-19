@@ -29,12 +29,6 @@ namespace kern::gl
          */
         Texture(int width, int height, bool follow_window_dims);
 
-        Texture(const Texture&) = delete;
-        Texture& operator=(const Texture&) = delete;
-
-        Texture(const Texture&& src);
-        Texture& operator=(const Texture&& src);
-
         ~Texture();
 
         void resize(int width, int height) const;

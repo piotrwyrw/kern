@@ -3,10 +3,12 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <kern/gl/texture.hpp>
+#include <kern/gl/resource_manager.hpp>
 
 namespace kern::gl
 {
-    Texture::Texture(const int width, const int height, const bool follow_window_dims)
+    Texture::Texture(const int width, const int height,
+                     const bool follow_window_dims)
         : txt_(0), follow_window_dims_(follow_window_dims), alloc_txt_([&](const int w, const int h)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, INTERNAL_FORMAT,

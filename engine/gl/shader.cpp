@@ -9,7 +9,7 @@
 
 namespace kern::gl
 {
-    void Shader::handle_compilation_error(const GLuint shader, const std::string& debug_name,
+    void ShaderProgram::handle_compilation_error(const GLuint shader, const std::string& debug_name,
                                           const std::string& type_name)
     {
         int compile_status,
@@ -32,7 +32,7 @@ namespace kern::gl
                                                "failed: {}", type_name, debug_name, log));
     }
 
-    void Shader::handle_link_error(const GLuint program, const std::string& debug_name)
+    void ShaderProgram::handle_link_error(const GLuint program, const std::string& debug_name)
     {
         int link_status,
             log_length;
@@ -54,7 +54,7 @@ namespace kern::gl
             "ShaderProgram Error: Failed to link program {}: {}", debug_name, log));
     }
 
-    GLuint Shader::compile_shader(const GLenum shader_type, const std::string& src,
+    GLuint ShaderProgram::compile_shader(const GLenum shader_type, const std::string& src,
                                   const std::string& debug_name,
                                   const std::string& type_name)
     {
@@ -70,7 +70,7 @@ namespace kern::gl
         return shader;
     }
 
-    GLuint Shader::link_program(const std::string& debug_name,
+    GLuint ShaderProgram::link_program(const std::string& debug_name,
                                 const GLuint fragment_shader,
                                 const GLuint vertex_shader)
     {
@@ -87,7 +87,7 @@ namespace kern::gl
         return program;
     }
 
-    Shader::Shader(const std::string& debug_name,
+    ShaderProgram::ShaderProgram(const std::string& debug_name,
                    const std::string& vertex_source,
                    const std::string& fragment_source)
         : program_(link_program(
@@ -108,9 +108,9 @@ namespace kern::gl
     {
     }
 
-    Shader::Shader(const std::string& vertex_source_path,
+    ShaderProgram::ShaderProgram(const std::string& vertex_source_path,
                    const std::string& fragment_source_path)
-        : Shader(
+        : ShaderProgram(
             std::format(
                 "{}/{}",
                 vertex_source_path,
@@ -122,13 +122,13 @@ namespace kern::gl
     {
     }
 
-    Shader::Shader(Shader&& src) noexcept
+    ShaderProgram::ShaderProgram(ShaderProgram&& src) noexcept
         : program_(src.program_)
     {
         src.program_ = 0;
     }
 
-    Shader& Shader::operator=(Shader&& src) noexcept
+    ShaderProgram& ShaderProgram::operator=(ShaderProgram&& src) noexcept
     {
         if (this == &src)
             return *this;
@@ -140,22 +140,22 @@ namespace kern::gl
         return *this;
     }
 
-    Shader::~Shader()
+    ShaderProgram::~ShaderProgram()
     {
         glDeleteProgram(program_);
     }
 
-    GLuint Shader::get_program() const
+    GLuint ShaderProgram::get_program() const
     {
         return program_;
     }
 
-    void Shader::use_program() const
+    void ShaderProgram::use_program() const
     {
         glUseProgram(program_);
     }
 
-    void Shader::set_uniform(const GLint location, const gfx::AnyUniform& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::AnyUniform& uniform) const
     {
         std::visit([&](const auto& u)
         {
@@ -164,55 +164,55 @@ namespace kern::gl
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform1f& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform1f& uniform) const
     {
         glUniform1f(location, uniform.data);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform2f& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform2f& uniform) const
     {
         glUniform2f(location, uniform[0], uniform[1]);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform3f& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform3f& uniform) const
     {
         glUniform3f(location, uniform[0], uniform[1], uniform[2]);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform4f& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform4f& uniform) const
     {
         glUniform4f(location, uniform[0], uniform[1], uniform[2], uniform[3]);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform16f& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform16f& uniform) const
     {
         glUniformMatrix4fv(location, 1, GL_FALSE, uniform.data);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform1i& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform1i& uniform) const
     {
         glUniform1i(location, uniform.data);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform2i& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform2i& uniform) const
     {
         glUniform2i(location, uniform[0], uniform[1]);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform3i& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform3i& uniform) const
     {
         glUniform3i(location, uniform[0], uniform[1], uniform[2]);
     }
 
     template <>
-    void Shader::set_uniform(const GLint location, const gfx::Uniform4i& uniform) const
+    void ShaderProgram::set_uniform(const GLint location, const gfx::Uniform4i& uniform) const
     {
         glUniform4i(location, uniform[0], uniform[1], uniform[2], uniform[3]);
     }

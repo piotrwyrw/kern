@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <glfw/glfw3.h>
-#include <spdlog/logger.h>
+#include <kern/gl.hpp>
 
+#include <spdlog/logger.h>
 #include <exception>
 #include <format>
 #include <functional>

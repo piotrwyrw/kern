@@ -5,31 +5,52 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
-#define KERN_MAKE_HANDLE_(name) \
-    struct name { \
-        uint32_t index = UINT32_MAX; \
-        [[nodiscard]] bool valid() const \
-        { \
-            return index != UINT32_MAX; \
-        }\
-        void invalidate() \
-        { \
-            index = UINT32_MAX; \
-        } \
+#define KERN_MAKE_HANDLE_FOR_(type_, ns, name)                                             \
+    namespace kern {                                                                \
+        struct name##Handle {                                                       \
+            std::uint32_t index = UINT32_MAX;                                       \
+            std::uint32_t generation = UINT32_MAX;                                  \
+                                                                                    \
+            [[nodiscard]] bool valid() const                                        \
+            {                                                                       \
+                return index != UINT32_MAX && generation != UINT32_MAX;             \
+            }                                                                       \
+                                                                                    \
+            void invalidate()                                                       \
+            {                                                                       \
+                index = UINT32_MAX;                                                 \
+                generation = UINT32_MAX;                                            \
+            }                                                                       \
+        };                                                                          \
+    };                                                                              \
+    namespace ns { type_ name; }                                                    \
+    namespace kern {                                                                \
+        template<> struct handle_to_target<name##Handle> { using type = ns::name; };\
     }
 
 namespace kern
 {
-    KERN_MAKE_HANDLE_(GpuMeshHandle);
+    template <typename>
+    struct handle_to_target
+    {
+        using type = void;
+    };
 
-    KERN_MAKE_HANDLE_(MeshInstanceHandle);
-
-    KERN_MAKE_HANDLE_(ShaderProgramHandle);
-
-    KERN_MAKE_HANDLE_(MaterialHandle);
-
-    KERN_MAKE_HANDLE_(TextureHandle);
-
-    KERN_MAKE_HANDLE_(FrameBufferHandle);
+    template <typename T>
+    using handle_to_target_t = handle_to_target<T>::type;
 }
+
+KERN_MAKE_HANDLE_FOR_(class, kern::gl, GpuMesh);
+
+KERN_MAKE_HANDLE_FOR_(class, kern::gl, ShaderProgram);
+
+KERN_MAKE_HANDLE_FOR_(class, kern::gl, Texture);
+
+KERN_MAKE_HANDLE_FOR_(class, kern::gl, FrameBuffer);
+
+KERN_MAKE_HANDLE_FOR_(class, kern::gfx, Material);
+
+
+KERN_MAKE_HANDLE_FOR_(struct, kern::scene, MeshInstance);

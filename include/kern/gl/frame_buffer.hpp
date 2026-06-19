@@ -5,17 +5,17 @@
 #pragma once
 
 #include <kern/gl.hpp>
-#include <kern/gl/texture.hpp>
+#include <kern/gfx/handles.hpp>
 
 namespace kern::gl
 {
     class FrameBuffer
     {
         GLuint fbo_;
-        Texture texture_;
+        TextureHandle texture_;
 
     public:
-        FrameBuffer(int width, int height);
+        FrameBuffer(TextureHandle texture);
 
         ~FrameBuffer();
 

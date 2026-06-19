@@ -11,7 +11,7 @@
 
 namespace kern::gl
 {
-    class Shader
+    class ShaderProgram
     {
         GLuint program_;
 
@@ -32,20 +32,20 @@ namespace kern::gl
                                                  GLuint vertex_shader);
 
     public:
-        Shader(const std::string& debug_name,
-               const std::string& vertex_source,
-               const std::string& fragment_source);
+        ShaderProgram(const std::string& debug_name,
+                      const std::string& vertex_source,
+                      const std::string& fragment_source);
 
-        Shader(const std::string& vertex_source_path,
-               const std::string& fragment_source_path);
+        ShaderProgram(const std::string& vertex_source_path,
+                      const std::string& fragment_source_path);
 
-        Shader(const Shader&) = delete;
-        Shader& operator=(const Shader&) = delete;
+        ShaderProgram(const ShaderProgram&) = delete;
+        ShaderProgram& operator=(const ShaderProgram&) = delete;
 
-        Shader(Shader&& src) noexcept;
-        Shader& operator=(Shader&& src) noexcept;
+        ShaderProgram(ShaderProgram&& src) noexcept;
+        ShaderProgram& operator=(ShaderProgram&& src) noexcept;
 
-        ~Shader();
+        ~ShaderProgram();
 
         [[nodiscard]] GLuint get_program() const;
 
@@ -58,29 +58,29 @@ namespace kern::gl
     };
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform1f& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform1f& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform2f& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform2f& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform3f& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform3f& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform4f& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform4f& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform16f& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform16f& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform1i& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform1i& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform2i& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform2i& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform3i& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform3i& uniform) const;
 
     template <>
-    void Shader::set_uniform(GLint location, const gfx::Uniform4i& uniform) const;
+    void ShaderProgram::set_uniform(GLint location, const gfx::Uniform4i& uniform) const;
 }

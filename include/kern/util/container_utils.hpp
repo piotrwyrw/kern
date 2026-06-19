@@ -11,13 +11,25 @@
 namespace kern::util
 {
     template <typename Handle, typename T>
-    const T& get_or_throw(const std::vector<T>& vec, const Handle& handle, const std::string& error)
+    T& get_or_throw(std::vector<T>& vec,
+                    const Handle& handle,
+                    const std::string& error)
     {
         auto index = handle.index;
+        auto gen = handle.generation;
+
         if (index >= vec.size())
         {
             throw exception::Exception(error);
         }
-        return vec[index];
+
+        const auto& slot = vec[index];
+
+        if (slot.generation != gen)
+        {
+            throw exception::Exception(error);
+        }
+
+        return slot;
     }
 }

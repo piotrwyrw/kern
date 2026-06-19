@@ -74,7 +74,7 @@ SortIncludes: false
 SortUsingDeclarations: false
 SpaceAfterCStyleCast: false
 SpaceAfterTemplateKeyword: true
-AlwaysBreakTemplateDeclarations: Yes
+AlwaysBreakTemplateDeclarations: No
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: true

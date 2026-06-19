@@ -7,12 +7,14 @@
 
 namespace kern::gl
 {
-    FrameBuffer::FrameBuffer(const int width, const int height) : fbo_(0), texture_(width, height, true)
+    FrameBuffer::FrameBuffer(const TextureHandle texture)
+        : fbo_(0), texture_(texture)
     {
         glGenFramebuffers(1, &fbo_);
         glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
 
-        texture_.bind();
+        // TODO
+        // texture_.bind();
 
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE, 0);
 
