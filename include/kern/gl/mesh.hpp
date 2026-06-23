@@ -6,9 +6,12 @@
 
 #include <kern/gl.hpp>
 #include <kern/gfx/mesh.hpp>
+#include <kern/util/token.hpp>
 
 namespace kern::gl
 {
+    class ResourceManager;
+
     class GpuMesh
     {
         GLuint vao_;
@@ -17,23 +20,15 @@ namespace kern::gl
 
         int index_count_;
 
-        void destroy_resources() const;
-
     public:
-        explicit GpuMesh(const mesh::Mesh& mesh);
+        explicit GpuMesh(GLuint vao, GLuint vbo, GLuint ebo, int index_count);
 
-        GpuMesh(const GpuMesh&) = delete;
-        GpuMesh& operator=(const GpuMesh&) = delete;
-
-        GpuMesh(GpuMesh&& src) noexcept;
-        GpuMesh& operator=(GpuMesh&& src) noexcept;
-
-        ~GpuMesh();
+        static GpuMesh create(const mesh::Mesh& mesh);
+        static void delete_resources(const GpuMesh& mesh);
 
         [[nodiscard]] GLuint get_vao_handle() const;
         [[nodiscard]] GLuint get_vbo_handle() const;
         [[nodiscard]] GLuint get_ebo_handle() const;
-
         [[nodiscard]] int get_index_count() const;
     };
 }

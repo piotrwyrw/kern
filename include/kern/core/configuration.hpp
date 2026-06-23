@@ -26,6 +26,7 @@ namespace kern
         bool fullscreen = false;
         int antialiasing_samples = 0;
         CursorMode cursor_mode = CursorMode::Enabled;
+        bool cursor_locked_to_center = false;
     };
 
     constexpr int DefaultAntialiasingSamples = 4;

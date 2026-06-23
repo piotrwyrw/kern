@@ -15,7 +15,6 @@ namespace kern
     {
         class Window
         {
-            const Configuration& config_;
             int initial_width_;
             int initial_height_;
 
@@ -29,6 +28,8 @@ namespace kern
             friend class kern::Engine;
 
         public:
+            const Configuration& config_;
+
             explicit Window(const Configuration& config);
             ~Window();
 

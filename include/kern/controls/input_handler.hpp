@@ -35,6 +35,8 @@ namespace kern
             int window_width_;
             int window_height_;
 
+            glm::vec2 window_center_;
+
             static void key_callback(GLFWwindow* window,
                                      int key,
                                      int scancode,

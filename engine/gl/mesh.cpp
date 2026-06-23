@@ -7,12 +7,19 @@
 
 namespace kern::gl
 {
-    GpuMesh::GpuMesh(const mesh::Mesh& mesh)
-        : vao_(0), vbo_(0), ebo_(0), index_count_(0)
+    GpuMesh::GpuMesh(const GLuint vao, const GLuint vbo, const GLuint ebo, const int index_count)
+        : vao_(vao), vbo_(vbo), ebo_(ebo), index_count_(index_count)
     {
-        glGenVertexArrays(1, &vao_);
-        glGenBuffers(1, &vbo_);
-        glGenBuffers(1, &ebo_);
+    }
+
+    GpuMesh GpuMesh::create(const mesh::Mesh& mesh)
+    {
+        GLuint vao, vbo, ebo;
+        int index_count;
+
+        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &vbo);
+        glGenBuffers(1, &ebo);
 
         std::vector<float> vbo_data{};
         vbo_data.reserve(mesh.vertices.size() * 8);
@@ -33,17 +40,17 @@ namespace kern::gl
             ebo_data.insert(ebo_data.end(), {v[0], v[1], v[2]});
         }
 
-        index_count_ = static_cast<int>(ebo_data.size());
+        index_count = static_cast<int>(ebo_data.size());
 
-        glBindVertexArray(vao_);
+        glBindVertexArray(vao);
 
-        glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER,
                      sizeof(float) * vbo_data.size(), // NOLINT
                      vbo_data.data(),
                      GL_STATIC_DRAW);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                      sizeof(uint32_t) * ebo_data.size(), // NOLINT
                      ebo_data.data(),
@@ -53,7 +60,9 @@ namespace kern::gl
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, nullptr);
         glEnableVertexAttribArray(0);
 
+
         // Vertex normals
+        // TODO offsetof
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
                               sizeof(float) * 8,
                               reinterpret_cast<void*>(sizeof(float) * 3));
@@ -67,52 +76,15 @@ namespace kern::gl
 
 
         glBindVertexArray(0);
+
+        return GpuMesh(vao, vbo, ebo, index_count);
     }
 
-    GpuMesh::GpuMesh(GpuMesh&& src) noexcept
-        : vao_(src.vao_),
-          vbo_(src.vbo_),
-          ebo_(src.ebo_),
-          index_count_(src.index_count_)
+    void GpuMesh::delete_resources(const GpuMesh& mesh)
     {
-        src.vao_ = 0;
-        src.vbo_ = 0;
-        src.ebo_ = 0;
-        src.index_count_ = 0;
-    }
-
-    GpuMesh& GpuMesh::operator=(GpuMesh&& src) noexcept
-    {
-        if (this == &src)
-            return *this;
-
-        destroy_resources();
-
-        vao_ = src.vao_;
-        src.vao_ = 0;
-
-        vbo_ = src.vbo_;
-        src.vbo_ = 0;
-
-        ebo_ = src.ebo_;
-        src.ebo_ = 0;
-
-        index_count_ = src.index_count_;
-        src.index_count_ = 0;
-
-        return *this;
-    }
-
-    void GpuMesh::destroy_resources() const
-    {
-        glDeleteBuffers(1, &vbo_);
-        glDeleteBuffers(1, &ebo_);
-        glDeleteVertexArrays(1, &vao_);
-    }
-
-    GpuMesh::~GpuMesh()
-    {
-        destroy_resources();
+        glDeleteBuffers(1, &mesh.vbo_);
+        glDeleteBuffers(1, &mesh.ebo_);
+        glDeleteVertexArrays(1, &mesh.vao_);
     }
 
     int GpuMesh::get_index_count() const

@@ -18,7 +18,7 @@ namespace kern::exception
         const std::string message_;
 
     public:
-        Exception(std::string message);
+        explicit Exception(std::string message);
 
         [[nodiscard]] const char* what() const noexcept override;
     };
@@ -28,6 +28,8 @@ namespace kern::exception
     void log(spdlog::logger& logger, const Exception& e);
 
     void handle_all(spdlog::logger& logger, const std::function<void()>& fn);
+
+    void assert_or_throw(bool condition, const std::string& message);
 
     template <typename F, typename... Args>
     auto glfw_try(F&& f, Args&&... args)

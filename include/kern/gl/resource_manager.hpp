@@ -4,122 +4,47 @@
 
 #pragma once
 
-#include <kern/exception/exception.hpp>
 #include <kern/gfx/handles.hpp>
 #include <kern/gl/mesh.hpp>
 #include <kern/gl/shader.hpp>
 #include <kern/gl/texture.hpp>
 #include <kern/gl/frame_buffer.hpp>
 #include <kern/gfx/material.hpp>
-#include <kern/util/container_utils.hpp>
+#include <kern/gl/resource_container.hpp>
 
 #include <vector>
 
+namespace spdlog
+{
+    class logger;
+}
+
 namespace kern::gl
 {
-    namespace resource_type_name
-    {
-        inline constexpr auto UNKNOWN = "Unknown Resource";
-        inline constexpr auto MESH = "Mesh";
-        inline constexpr auto SHADER = "Shader";
-        inline constexpr auto TEXTURE = "Texture";
-        inline constexpr auto FRAME_BUFFER = "Frame Buffer";
-        inline constexpr auto MATERIAL = "Material";
-
-        template <typename T>
-        struct resource_name_t
-        {
-            static constexpr const char* const name = UNKNOWN;
-        };
-
-        template <>
-        struct resource_name_t<mesh::Mesh>
-        {
-            static constexpr const char* const name = MESH;
-        };
-
-        template <>
-        struct resource_name_t<ShaderProgram>
-        {
-            static constexpr const char* const name = SHADER;
-        };
-
-        template <>
-        struct resource_name_t<Texture>
-        {
-            static constexpr const char* const name = TEXTURE;
-        };
-
-        template <>
-        struct resource_name_t<FrameBuffer>
-        {
-            static constexpr const char* const name = FRAME_BUFFER;
-        };
-
-        template <>
-        struct resource_name_t<gfx::Material>
-        {
-            static constexpr const char* const name = MATERIAL;
-        };
-
-        template <typename T>
-        constexpr auto resource_name_v = resource_name_t<T>::name;
-    }
-
-    template <typename T>
-    struct ResourceSlot
-    {
-        T content;
-        bool exists;
-        std::uint32_t generation;
-    };
-
     class ResourceManager
     {
-        std::vector<ResourceSlot<GpuMesh>> meshes_{};
-        std::vector<ResourceSlot<ShaderProgram>> shaders_{};
-        std::vector<ResourceSlot<Texture>> textures_{};
-        std::vector<ResourceSlot<FrameBuffer>> frame_buffers_{};
-        std::vector<ResourceSlot<gfx::Material>> materials_{};
+        spdlog::logger& logger_;
+
+        ResourceContainer<GpuMesh> meshes_;
+        ResourceContainer<ShaderProgram> shaders_;
+        ResourceContainer<Texture> textures_;
+        ResourceContainer<FrameBuffer> frame_buffers_;
+        ResourceContainer<gfx::Material> materials_;
+
+        template <typename Resource>
+        ResourceContainer<Resource>& get_rsrc_container();
+
+        template <typename Resource>
+        const ResourceContainer<Resource>& get_rsrc_container() const;
 
         template <typename Handle>
-        using slot_t = ResourceSlot<handle_to_target_t<Handle>>;
+        unwrap_hdl_t<Handle>& get_rsrc(Handle handle);
 
         template <typename Handle>
-        using slot_vec_t = std::vector<slot_t<Handle>>;
-
-        template <typename Handle>
-        slot_vec_t<Handle>& get_resource_vec();
-
-        template <typename Handle>
-        const slot_vec_t<Handle>& get_resource_vec() const
-        {
-            return const_cast<ResourceManager*>(this)->get_resource_vec<Handle>();
-        }
-
-        template <typename Handle>
-        handle_to_target_t<Handle>& get_resource(Handle handle)
-        {
-            return util::get_or_throw<slot_t<Handle>>(
-                get_resource_vec<Handle>(),
-                handle,
-                std::format(
-                    "ResourceManager Error: Attempted to retrieve "
-                    "a {} resource with invalid handle (Index {}, Generation {})",
-                    resource_type_name::resource_name_v<handle_to_target_t<Handle>>,
-                    handle.index, handle.generation
-                )
-            ).content;
-        }
-
-        template <typename Handle>
-        const handle_to_target_t<Handle>& get_resource(Handle handle) const
-        {
-            return get_resource(handle);
-        }
+        const unwrap_hdl_t<Handle>& get_rsrc(Handle handle) const;
 
     public:
-        ResourceManager() = default;
+        explicit ResourceManager(spdlog::logger& logger);
         ~ResourceManager() = default;
 
         ResourceManager(const ResourceManager&) = delete;
@@ -132,47 +57,97 @@ namespace kern::gl
         [[nodiscard]] const Texture& get_texture(const TextureHandle& handle) const;
         [[nodiscard]] const FrameBuffer& get_frame_buffer(const FrameBufferHandle& handle) const;
         [[nodiscard]] const gfx::Material& get_material(const MaterialHandle& handle) const;
+
+        template <typename... Args>
+        [[nodiscard]] GpuMeshHandle create_mesh(Args&&... args);
+
+        template <typename... Args>
+        [[nodiscard]] ShaderProgramHandle create_shader(Args&&... args);
+
+        template <typename... Args>
+        [[nodiscard]] TextureHandle create_texture(Args&&... args);
+
+        template <typename... Args>
+        [[nodiscard]] FrameBufferHandle create_frame_buffer(Args&&... args);
+
+        template <typename... Args>
+        [[nodiscard]] MaterialHandle create_material(Args&&... args);
     };
 
+    inline ResourceManager::ResourceManager(spdlog::logger& logger)
+        : logger_(logger),
+          meshes_{logger_},
+          shaders_{logger_},
+          textures_{logger_},
+          frame_buffers_(logger_),
+          materials_(logger_)
+    {
+    }
+
+    template <typename Resource>
+    ResourceContainer<Resource>& ResourceManager::get_rsrc_container()
+    {
+        throw exception::Exception(
+            "ResourceManager Error: Attempted to retrieve resource vector with unknown handle type."
+        );
+    }
+
+    template <typename Resource>
+    const ResourceContainer<Resource>& ResourceManager::get_rsrc_container() const
+    {
+        return const_cast<ResourceManager*>(this)->get_rsrc_container<Resource>();
+    }
+
+    template <>
+    inline ResourceContainer<GpuMesh>& ResourceManager::get_rsrc_container<GpuMesh>() { return meshes_; }
+
+    template <>
+    inline ResourceContainer<ShaderProgram>& ResourceManager::get_rsrc_container<ShaderProgram>() { return shaders_; }
+
+    template <>
+    inline ResourceContainer<Texture>& ResourceManager::get_rsrc_container<Texture>() { return textures_; }
+
+    template <>
+    inline ResourceContainer<FrameBuffer>& ResourceManager::get_rsrc_container<FrameBuffer>() { return frame_buffers_; }
+
+    template <>
+    inline ResourceContainer<gfx::Material>& ResourceManager::get_rsrc_container<gfx::Material>() { return materials_; }
+
     template <typename Handle>
-    ResourceManager::slot_vec_t<Handle>& ResourceManager::get_resource_vec()
+    unwrap_hdl_t<Handle>& ResourceManager::get_rsrc(Handle handle)
     {
-        throw exception::Exception("ResourceManager Error: Attempted to retrieve resource vector "
-            "with unknown handle type.");
+        auto& cont = get_rsrc_container<unwrap_hdl_t<Handle>>();
+        return cont.get_resource(handle);
     }
 
-    template <>
-    inline ResourceManager::slot_vec_t<GpuMeshHandle>&
-    ResourceManager::get_resource_vec<GpuMeshHandle>()
+    template <typename Handle>
+    const unwrap_hdl_t<Handle>& ResourceManager::get_rsrc(Handle handle) const
     {
-        return meshes_;
+        return const_cast<ResourceManager*>(this)->get_rsrc(handle);
     }
 
-    template <>
-    inline ResourceManager::slot_vec_t<ShaderProgramHandle>&
-    ResourceManager::get_resource_vec<ShaderProgramHandle>()
+    inline const GpuMesh& ResourceManager::get_mesh(const GpuMeshHandle& handle) const
     {
-        return shaders_;
+        return get_rsrc(handle);
     }
 
-    template <>
-    inline ResourceManager::slot_vec_t<TextureHandle>&
-    ResourceManager::get_resource_vec<TextureHandle>()
+    inline const ShaderProgram& ResourceManager::get_shader(const ShaderProgramHandle& handle) const
     {
-        return textures_;
+        return get_rsrc(handle);
     }
 
-    template <>
-    inline ResourceManager::slot_vec_t<FrameBufferHandle>&
-    ResourceManager::get_resource_vec<FrameBufferHandle>()
+    inline const Texture& ResourceManager::get_texture(const TextureHandle& handle) const
     {
-        return frame_buffers_;
+        return get_rsrc(handle);
     }
 
-    template <>
-    inline ResourceManager::slot_vec_t<MaterialHandle>&
-    ResourceManager::get_resource_vec<MaterialHandle>()
+    inline const FrameBuffer& ResourceManager::get_frame_buffer(const FrameBufferHandle& handle) const
     {
-        return materials_;
+        return get_rsrc(handle);
+    }
+
+    inline const gfx::Material& ResourceManager::get_material(const MaterialHandle& handle) const
+    {
+        return get_rsrc(handle);
     }
 }

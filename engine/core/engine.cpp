@@ -76,7 +76,7 @@ namespace kern
           window_(platform::Window(config)),
           renderer_(gfx::Renderer(window_)),
           context_(*this, window_, config, logger_),
-          resources_(gl::ResourceManager()),
+          resources_(gl::ResourceManager(logger_)),
           world_(scene::Scene()),
           camera_(gfx::Camera(
               *this,
@@ -111,8 +111,6 @@ namespace kern
 
     void Engine::run()
     {
-        logger_.info("Initializing Kern " KERN_VERSION);
-
         game_->on_start(context_);
 
         auto& timing = context_.get_timing();

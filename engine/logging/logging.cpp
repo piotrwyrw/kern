@@ -8,6 +8,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/daily_file_sink.h>
 
+#include "kern/version.hpp"
+
 namespace kern::log
 {
     namespace
@@ -53,6 +55,8 @@ namespace kern::log
 
         logger.set_level(log_level);
         logger.set_pattern("%H:%M:%S %^[%L]%$ %v");
+
+        logger.info("Initializing Kern " KERN_VERSION);
 
         return logger;
     }

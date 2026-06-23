@@ -52,14 +52,13 @@ add_library(kern STATIC
         engine/logging/logging.cpp
         engine/platform/window.cpp
         engine/gl/mesh.cpp
-        engine/gl/resource_manager.cpp
         engine/gl/shader.cpp
         engine/gfx/layer.cpp
         engine/scene/render_world.cpp
         engine/gfx/renderer.cpp
         engine/gfx/camera.cpp
         engine/util/util.cpp
-        include/kern/util/access_key.hpp
+        include/kern/types/types.hpp
 )
 
 
@@ -81,9 +80,7 @@ target_include_directories(kern
 
 # Warn about everything but unused fields and parameters (It's annoying during development)
 target_compile_options(kern PRIVATE
-        -Wall -Wextra -Wpedantic
-        -Wno-unused-parameter
-        -Wno-unused-private-field)
+        -Wall -Wextra -Wpedantic)
 
 add_library(kern::kern ALIAS kern)
 

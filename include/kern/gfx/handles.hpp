@@ -5,52 +5,83 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
+#include <string_view>
 
-#define KERN_MAKE_HANDLE_FOR_(type_, ns, name)                                             \
-    namespace kern {                                                                \
-        struct name##Handle {                                                       \
-            std::uint32_t index = UINT32_MAX;                                       \
-            std::uint32_t generation = UINT32_MAX;                                  \
-                                                                                    \
-            [[nodiscard]] bool valid() const                                        \
-            {                                                                       \
-                return index != UINT32_MAX && generation != UINT32_MAX;             \
-            }                                                                       \
-                                                                                    \
-            void invalidate()                                                       \
-            {                                                                       \
-                index = UINT32_MAX;                                                 \
-                generation = UINT32_MAX;                                            \
-            }                                                                       \
-        };                                                                          \
-    };                                                                              \
-    namespace ns { type_ name; }                                                    \
-    namespace kern {                                                                \
-        template<> struct handle_to_target<name##Handle> { using type = ns::name; };\
+using namespace std::literals::string_view_literals;
+
+#define MAKE_HANDLE_(type_, ns, name, display_name)                                        \
+    namespace ns { type_ name; }                                                           \
+    namespace kern {                                                                       \
+        struct name##Handle {                                                              \
+            std::uint32_t   index = UINT32_MAX,                                            \
+                            generation = UINT32_MAX;                                       \
+                                                                                           \
+            [[nodiscard]] bool valid() const { return   index != UINT32_MAX &&             \
+                                                        generation != UINT32_MAX; }        \
+            void invalidate() { index = UINT32_MAX;                                        \
+                                generation = UINT32_MAX; }                                 \
+        };                                                                                 \
+        template<> struct unwrap_hdl<name##Handle>  { using type = ns::name; };            \
+        template<> struct wrap_hdl  <ns::name>      { using type = kern::name##Handle; };  \
+        template<> struct rsrc_name <ns::name>  {                                      \
+            static constexpr auto value = display_name##sv;                                \
+        };                                                                                 \
     }
 
 namespace kern
 {
     template <typename>
-    struct handle_to_target
+    struct unwrap_hdl
     {
         using type = void;
     };
 
-    template <typename T>
-    using handle_to_target_t = handle_to_target<T>::type;
+    template <typename>
+    struct wrap_hdl
+    {
+        using type = void;
+    };
+
+    template <typename>
+    struct rsrc_name
+    {
+        static constexpr std::string_view value = "Unknown Resource";
+    };
+
+    /**
+     * Converts a handle type to a resource type.<br/><br/>
+     * <b>Example:</b> <code>ShaderProgramHandle</code> becomes <code>ShaderProgram</code>
+     */
+    template <typename Handle>
+    using unwrap_hdl_t = unwrap_hdl<Handle>::type;
+
+    /**
+     * Converts a resource type to a handle type.<br/><br/>
+     * <b>Example:</b> <code>ShaderProgram</code> becomes <code>ShaderProgramHandle</code>
+     */
+    template <typename Resource>
+    using wrap_hdl_t = wrap_hdl<Resource>::type;
+
+    /**
+     * Provides the name of a resource.<br/><br/>
+     * <b>Example:</b> Given <code>GpuMesh</code> returns <code>"GpuMesh"</code>
+     */
+    template <typename Resource>
+    constexpr auto rsrc_name_v = rsrc_name<Resource>::value;
 }
 
-KERN_MAKE_HANDLE_FOR_(class, kern::gl, GpuMesh);
 
-KERN_MAKE_HANDLE_FOR_(class, kern::gl, ShaderProgram);
+MAKE_HANDLE_(class, kern::gl, GpuMesh, "GPU Mesh");
 
-KERN_MAKE_HANDLE_FOR_(class, kern::gl, Texture);
+MAKE_HANDLE_(class, kern::gl, ShaderProgram, "Shader program");
 
-KERN_MAKE_HANDLE_FOR_(class, kern::gl, FrameBuffer);
+MAKE_HANDLE_(class, kern::gl, Texture, "Texture");
 
-KERN_MAKE_HANDLE_FOR_(class, kern::gfx, Material);
+MAKE_HANDLE_(class, kern::gl, FrameBuffer, "Frame buffer");
+
+MAKE_HANDLE_(class, kern::gfx, Material, "Material");
+
+MAKE_HANDLE_(struct, kern::scene, MeshInstance, "Mesh instance");
 
 
-KERN_MAKE_HANDLE_FOR_(struct, kern::scene, MeshInstance);
+#undef MAKE_HANDLE_

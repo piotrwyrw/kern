@@ -4,12 +4,9 @@
 
 #pragma once
 
-namespace kern::util
+#include <cstdint>
+
+namespace kern
 {
-    template <typename T>
-    class AccessKey
-    {
-        AccessKey() = default;
-        friend T;
-    };
+    using index_t = std::uint32_t;
 }

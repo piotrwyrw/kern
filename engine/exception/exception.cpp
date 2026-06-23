@@ -41,4 +41,12 @@ namespace kern::exception
             show_message_box(e);
         }
     }
+
+    void assert_or_throw(const bool condition, const std::string& message)
+    {
+        if (condition)
+            return;
+
+        throw Exception(std::format("Assertion Failed: {}", message));
+    }
 }

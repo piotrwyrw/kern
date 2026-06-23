@@ -15,6 +15,7 @@ public:
         cfg.window_width = 1000;
         cfg.window_height = 700;
         cfg.cursor_mode = kern::CursorMode::Enabled;
+        cfg.cursor_locked_to_center = true;
 
         return cfg;
     }
@@ -47,7 +48,9 @@ public:
         if (handler.cursor_moved())
         {
             auto loc = handler.cursor_position();
-            logger.info("Cursor location: X: {}, Y: {}", loc.x, loc.y);
+            auto delta = handler.cursor_direction();
+            logger.info("Cursor location: X: {}, Y: {} | DX: {}, DY: {}", loc.x, loc.y, delta.x,
+                        delta.y);
         }
 
         if (handler.just_resized())

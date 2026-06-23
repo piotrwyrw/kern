@@ -19,7 +19,9 @@ namespace kern::controls
           cursor_prev_(0.0, 0.0),
           window_just_resized_(false),
           window_width_(window.get_initial_width()),
-          window_height_(window.get_initial_height())
+          window_height_(window.get_initial_height()),
+          window_center_(static_cast<float>(window_width_) / 2.0f,
+                         static_cast<float>(window_height_) / 2.0f)
 
     {
         // Smuggle the handler instance to the static handler methods
@@ -38,8 +40,8 @@ namespace kern::controls
         glfwSetWindowUserPointer(window_handle_, nullptr);
     }
 
-    void InputHandler::key_callback(GLFWwindow* window, const int key, int scancode,
-                                    const int action, int mods)
+    void InputHandler::key_callback(GLFWwindow* window, const int key, [[maybe_unused]] int scancode,
+                                    const int action, [[maybe_unused]] int mods)
     {
         if (key == GLFW_KEY_UNKNOWN || key < 0 || key > GLFW_KEY_LAST)
             return;
@@ -62,8 +64,18 @@ namespace kern::controls
             return;
         }
 
-        handler->cursor_curr_.x = static_cast<float>(xpos);
-        handler->cursor_curr_.y = static_cast<float>(ypos);
+        auto& curr = handler->cursor_curr_;
+        curr.x = static_cast<float>(xpos);
+        curr.y = static_cast<float>(ypos);
+
+        // TODO Deltas jump around when center-locked
+        if (handler->window_.config_.cursor_locked_to_center)
+        {
+            const double center_x = handler->window_width_ / 2.0;
+            const double center_y = handler->window_height_ / 2.0;
+
+            glfwSetCursorPos(window, center_x, center_y);
+        }
 
         // Avoid a cursor delta jump at the first update
         if (handler->is_first_cursor_event_)
@@ -111,7 +123,6 @@ namespace kern::controls
         return (!keys_curr_[key_]) && keys_prev_[key_];
     }
 
-
     bool InputHandler::is_key_held_up(Key key) const
     {
         const auto key_ = static_cast<int>(key);
@@ -123,7 +134,6 @@ namespace kern::controls
         const auto key_ = static_cast<int>(key);
         return !keys_curr_[key_];
     }
-
 
     glm::vec2 InputHandler::cursor_position() const
     {
@@ -141,7 +151,7 @@ namespace kern::controls
 
     glm::vec2 InputHandler::cursor_delta() const
     {
-        return (cursor_curr_ - cursor_prev_);
+        return cursor_curr_ - cursor_prev_;
     }
 
     float InputHandler::cursor_speed() const
